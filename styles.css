@@ -56,9 +56,9 @@ h2{font-size:clamp(22px,3.4vw,28px)}
 .question-help{color:var(--color-text-secondary);line-height:1.55;margin:0 auto 28px;max-width:560px;font-size:15px}
 
 /* Investment highlight block */
-.invest-highlight{margin:0 auto 30px;max-width:520px}
-.invest-highlight .invest-lead{color:var(--color-text-secondary);font-size:15px;margin:0 0 6px}
-.invest-highlight .invest-value{font-family:"Playfair Display",Georgia,serif;color:var(--color-primary);font-size:clamp(36px,6vw,52px);margin:0 0 18px;font-weight:600}
+.invest-highlight{margin:0 auto 24px;max-width:520px}
+.invest-highlight .invest-lead{color:var(--color-text-secondary);font-size:15px;line-height:1.55;margin:0}
+.invest-highlight .invest-value{color:var(--color-primary);font-weight:700;white-space:nowrap}
 
 .options{display:grid;gap:12px;text-align:left}
 .option{width:100%;min-height:72px;border:1.5px solid var(--color-border);background:var(--color-surface);border-radius:var(--radius-md);padding:16px 20px;color:var(--color-text-secondary);font-size:18px;font-weight:500;cursor:pointer;transition:transform var(--transition-fast),border-color var(--transition-fast),background var(--transition-fast);display:flex;align-items:center;justify-content:center;gap:10px;text-align:center}
@@ -111,7 +111,6 @@ h2{font-size:clamp(22px,3.4vw,28px)}
   .option{min-height:60px;padding:14px 16px;font-size:17px}
   .multi-controls{align-items:stretch;flex-direction:column}
   .next-button{width:100%}
-  .invest-highlight .invest-value{font-size:clamp(32px,10vw,42px)}
 }
 
 @media (prefers-reduced-motion:reduce){
