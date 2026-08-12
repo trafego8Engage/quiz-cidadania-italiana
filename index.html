@@ -1,54 +1,45 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Diagnóstico interativo de cidadania italiana" />
-  <title>Diagnóstico de Cidadania Italiana</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz de Cidadania Italiana | Gioppo & Conti</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <main class="page-shell">
     <section class="quiz-card" aria-live="polite">
       <header class="quiz-header">
-        <div class="brand">Gioppo & Conti</div>
-        <div class="progress-wrap">
-          <div class="progress-meta">
-            <span id="stepLabel">Pergunta 1 de 8</span>
-            <span id="progressPercent">13%</span>
-          </div>
-          <div class="progress-bar" aria-hidden="true">
-            <div id="progressFill" class="progress-fill"></div>
-          </div>
+        <div class="brand">GIOPPO & CONTI</div>
+        <div class="progress-meta">
+          <span id="stepLabel">Pergunta 1 de 8</span>
+          <span id="progressPercent">13%</span>
         </div>
+        <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
       </header>
 
-      <div id="quizView">
-        <p id="eyebrow" class="eyebrow">Diagnóstico de cidadania italiana</p>
-        <h1 id="questionTitle"></h1>
-        <p id="questionHelp" class="question-help"></p>
-        <div id="options" class="options-grid"></div>
+      <section id="quizView" class="quiz-view">
+        <button id="backButton" class="back-button" type="button">← Voltar</button>
 
-        <div class="quiz-actions">
-          <button id="backButton" class="btn btn-secondary" type="button">Voltar</button>
+        <div class="question-wrap">
+          <p class="eyebrow">Análise de perfil</p>
+          <h1 id="questionTitle"></h1>
+          <p id="questionHelp" class="question-help"></p>
+          <div id="options" class="options"></div>
+
+          <div id="multiControls" class="multi-controls hidden">
+            <p id="multiHint" class="multi-hint"></p>
+            <button id="nextButton" class="next-button" type="button">Continuar</button>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div id="analysisView" class="analysis-view hidden">
-        <div class="spinner" aria-hidden="true"></div>
-        <p class="eyebrow">Diagnóstico concluído</p>
-        <h2>Analisando suas respostas...</h2>
-        <div class="analysis-list">
-          <div>Vínculo familiar <span>✓</span></div>
-          <div>Momento do processo <span>✓</span></div>
-          <div>Potencial de avanço <span>✓</span></div>
-        </div>
-      </div>
-
-      <div id="errorBox" class="error-box hidden" role="alert"></div>
+      <section id="analysisView" class="analysis-view hidden">
+        <div class="spinner"></div>
+        <p class="eyebrow">Analisando suas respostas</p>
+        <h2>Estamos preparando seu resultado.</h2>
+        <p>Você será direcionado automaticamente para a próxima etapa.</p>
+      </section>
     </section>
   </main>
 
