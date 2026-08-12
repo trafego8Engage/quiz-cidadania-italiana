@@ -5,19 +5,32 @@ const CONFIG = {
     grade2: 'https://lp.gioppoeconti.com.br/obrigado-grau-2/'
   },
   hubspot: { portalId: '', formGuid: '' },
-  analysisDelayMs: 1600
+  transitionMs: 220,
+  feedbackMs: 1800,
+  analysisMs: 2600
 };
 
-/*
-  Alta: 60+
-  Média: 35–59
-  Baixa: <35
-  Alta + Média -> Grau 1
-  Baixa -> Grau 2
-  Sem pontos negativos
-  P4 múltipla, até 5 seleções / máximo 5 pontos
-  Score máximo: 95
-*/
+const ICONS = {
+  origem:'<svg viewBox="0 0 24 24"><path d="M6 3v18"/><path d="M6 4h11l-2.5 3.5L17 11H6"/></svg>',
+  parentesco:'<svg viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M12 7.5v4M12 11.5l-5 3.7M12 11.5l5 3.7"/></svg>',
+  documentos:'<svg viewBox="0 0 24 24"><path d="M8 3h6l4 4v14H8z"/><path d="M14 3v4h4"/><path d="M10.5 12h5M10.5 15h5M10.5 9h2.5"/></svg>',
+  objetivos:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2l-1.7 4.4-4.4 1.7 1.7-4.4z"/></svg>',
+  momento:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3.2 2"/></svg>',
+  investimento:'<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="17" cy="14.5" r="1.2"/></svg>',
+  familiares:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="2.6"/><circle cx="16" cy="9.5" r="2.2"/><path d="M4.5 18c0-2.9 2.1-4.7 4.5-4.7s4.5 1.8 4.5 4.7"/><path d="M13.8 14.2c1.9.3 3.2 1.8 3.2 3.8"/></svg>',
+  idade:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.2"/><path d="M5.5 19c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/></svg>'
+};
+
+const FEEDBACK = {
+  documentos: {
+    title: 'Tudo certo.',
+    text: 'Mesmo que você ainda não tenha todos os documentos, existem formas de localizar os registros necessários.'
+  },
+  familiares: {
+    title: 'Interessante.',
+    text: 'Em alguns casos, realizar o processo em família pode ajudar a compartilhar parte dos custos.'
+  }
+};
 
 const questions = [
   {
@@ -88,15 +101,14 @@ const questions = [
   },
   {
     id:'investimento',
-    title:'Como você se encontra em relação ao investimento inicial?',
-    help:'Considere um investimento inicial aproximado de R$ 3.000 para iniciar o processo.',
+    title:'Como você se encontra hoje em relação a esse investimento?',
     property:'disponibilidade_investimento_cidadania',
     options:[
       ['Tenho disponibilidade para iniciar',15],
-      ['Consigo me organizar para esse investimento',12],
-      ['Pretendo dividir o investimento com familiares',8],
-      ['Preciso de mais tempo para me organizar',3],
-      ['Neste momento não consigo realizar esse investimento',0]
+      ['Consigo me organizar',12],
+      ['Posso dividir com familiares',8],
+      ['Preciso de mais tempo',3],
+      ['Não tenho condições no momento',0]
     ]
   },
   {
@@ -132,13 +144,14 @@ const $ = id => document.getElementById(id);
 
 function render(){
   const q = questions[step];
+  $('stepLabel').textContent = `Passo ${step+1} de ${questions.length}`;
+  const pct = Math.round(((step+1)/questions.length)*100);
+  $('progressFill').style.width = `${pct}%`;
+  $('iconBox').innerHTML = ICONS[q.id] || '';
   $('questionTitle').textContent = q.title;
   $('questionHelp').textContent = q.help || '';
   $('questionHelp').classList.toggle('hidden', !q.help);
-  $('stepLabel').textContent = `Pergunta ${step+1} de ${questions.length}`;
-  const pct = Math.round(((step+1)/questions.length)*100);
-  $('progressPercent').textContent = `${pct}%`;
-  $('progressFill').style.width = `${pct}%`;
+  $('investHighlight').classList.toggle('hidden', q.id !== 'investimento');
   $('backButton').disabled = step === 0;
   $('options').innerHTML = '';
   $('multiControls').classList.toggle('hidden', q.type !== 'multi');
@@ -150,13 +163,13 @@ function renderSingle(q){
     const b = document.createElement('button');
     b.type='button';
     b.className='option';
-    b.textContent=label;
+    b.innerHTML = `<span class="check">✓</span><span>${label}</span>`;
     if(answers[q.id]?.label===label) b.classList.add('selected');
     b.onclick=()=>{
       answers[q.id]={label,points:q.score===false?0:points,property:q.property||null};
       document.querySelectorAll('.option').forEach(el=>el.classList.remove('selected'));
       b.classList.add('selected');
-      setTimeout(advance,170);
+      setTimeout(advance,300);
     };
     $('options').appendChild(b);
   });
@@ -192,13 +205,54 @@ function renderMulti(q){
   });
 }
 
+function goToStep(newStep,direction){
+  const wrap = $('questionWrap');
+  wrap.classList.remove('is-visible');
+  wrap.classList.add(direction==='forward' ? 'is-exit' : 'is-exit-reverse');
+  setTimeout(()=>{
+    step = newStep;
+    render();
+    wrap.classList.remove('is-exit','is-exit-reverse');
+    wrap.classList.add(direction==='forward' ? 'is-enter' : 'is-enter-reverse');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      wrap.classList.remove('is-enter','is-enter-reverse');
+      wrap.classList.add('is-visible');
+    }));
+  },CONFIG.transitionMs);
+}
+
+function showFeedback(afterId,nextStepIndex){
+  const content = FEEDBACK[afterId];
+  $('feedbackTitle').textContent = content.title;
+  $('feedbackText').textContent = content.text;
+  $('quizView').classList.add('hidden');
+  $('feedbackView').classList.remove('hidden');
+  setTimeout(()=>{
+    $('feedbackView').classList.add('hidden');
+    $('quizView').classList.remove('hidden');
+    if(nextStepIndex>=questions.length){ finish(); return; }
+    step = nextStepIndex;
+    const wrap = $('questionWrap');
+    wrap.classList.remove('is-visible');
+    wrap.classList.add('is-enter');
+    render();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      wrap.classList.remove('is-enter');
+      wrap.classList.add('is-visible');
+    }));
+  },CONFIG.feedbackMs);
+}
+
 function advance(){
-  if(step<questions.length-1){ step++; render(); }
-  else finish();
+  const currentId = questions[step].id;
+  const isLast = step === questions.length-1;
+  if(FEEDBACK[currentId]){ showFeedback(currentId,step+1); return; }
+  if(isLast){ finish(); return; }
+  goToStep(step+1,'forward');
 }
 
 $('nextButton').onclick=advance;
-$('backButton').onclick=()=>{ if(step>0){ step--; render(); } };
+$('backButton').onclick=()=>{ if(step>0) goToStep(step-1,'back'); };
 
 function score(){
   return Object.values(answers).reduce((sum,a)=>sum+Number(a.points||0),0);
@@ -271,13 +325,28 @@ function preserveParams(target,total,priorityName,grade){
   return url.toString();
 }
 
+function runAnalysisSequence(){
+  const items = document.querySelectorAll('#analysisChecklist .check-item');
+  const stepDelay = CONFIG.analysisMs/(items.length+1);
+  items.forEach((item,i)=>{
+    setTimeout(()=>item.classList.add('visible'),stepDelay*(i+1));
+  });
+  $('analysisProgressFill').style.width='0%';
+  requestAnimationFrame(()=>{
+    $('analysisProgressFill').style.transition=`width ${CONFIG.analysisMs}ms linear`;
+    $('analysisProgressFill').style.width='100%';
+  });
+}
+
 async function finish(){
   const total=score();
   const priorityName=priority(total);
   const grade=destination(priorityName);
 
   $('quizView').classList.add('hidden');
+  $('feedbackView').classList.add('hidden');
   $('analysisView').classList.remove('hidden');
+  runAnalysisSequence();
 
   sessionStorage.setItem('quiz_result',JSON.stringify({
     total,
@@ -296,7 +365,7 @@ async function finish(){
   const target=grade==='Grau 1'?CONFIG.redirects.grade1:CONFIG.redirects.grade2;
   setTimeout(()=>{
     location.assign(preserveParams(target,total,priorityName,grade));
-  },CONFIG.analysisDelayMs);
+  },CONFIG.analysisMs);
 }
 
 render();
