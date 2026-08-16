@@ -7,7 +7,8 @@ const CONFIG = {
   hubspot: { portalId: '', formGuid: '' },
   transitionMs: 220,
   feedbackMs: 1800,
-  analysisMs: 2600
+  analysisMs: 2600,
+  redirectSeconds: 15
 };
 
 const ICONS = {
@@ -42,12 +43,7 @@ const CONCLUSIONS = {
     tensionTitle:'Você está em um bom ponto. Agora os detalhes fazem diferença.',
     tensionText:'Mesmo em casos aparentemente favoráveis, detalhes como linha de descendência, datas, documentos, registros e estratégia do processo podem alterar o caminho necessário. Por isso, antes de iniciar ou investir no processo, vale confirmar tecnicamente essas informações.',
     ctaTitle:'Converse com um especialista da Gioppo & Conti',
-    ctaText:'Nossa equipe pode analisar as informações iniciais do seu caso, esclarecer os próximos passos e indicar o caminho mais adequado.',
-    ctaPrimaryLabel:'QUERO ANALISAR MEU CASO',
-    ctaPrimaryTarget:'grade1',
-    ctaMicrocopy:'Leva apenas alguns minutos para dar o próximo passo.',
-    ctaSecondaryLabel:'Entender melhor meu diagnóstico',
-    ctaSecondaryTarget:'grade1',
+    ctaText:'Nossa equipe vai analisar as informações iniciais do seu caso, esclarecer os próximos passos e indicar o caminho mais adequado.',
     finalMessage:'Você já deu o primeiro passo. Agora é hora de transformar informações iniciais em uma análise concreta do seu caso.'
   },
   media:{
@@ -68,12 +64,7 @@ const CONCLUSIONS = {
       text:'Em muitos casos, o que separa uma dúvida de um processo possível é simplesmente descobrir qual informação precisa ser encontrada primeiro. A Gioppo & Conti pode ajudar a identificar isso.'
     },
     ctaTitle:'Descubra o que ainda falta no seu caso',
-    ctaText:'Converse com nossa equipe para entender quais pontos precisam ser esclarecidos e quais podem ser os próximos passos.',
-    ctaPrimaryLabel:'QUERO ENTENDER MEU CASO',
-    ctaPrimaryTarget:'grade1',
-    ctaMicrocopy:'Uma análise inicial pode ajudar a identificar o que precisa ser resolvido primeiro.',
-    ctaSecondaryLabel:'Ver informações importantes antes de continuar',
-    ctaSecondaryTarget:'grade1',
+    ctaText:'Nossa equipe vai te ajudar a entender quais pontos precisam ser esclarecidos e quais podem ser os próximos passos.',
     finalMessage:'Seu diagnóstico não terminou em um "sim" ou "não". Ele mostrou onde precisamos olhar com mais atenção.'
   },
   baixa:{
@@ -90,11 +81,6 @@ const CONCLUSIONS = {
     tensionText:'Talvez seja necessário investigar a origem familiar, localizar informações, compreender os requisitos ou se preparar melhor antes de iniciar qualquer processo. O importante é não tomar uma decisão baseada apenas em suposições.',
     ctaTitle:'Quer entender melhor por onde começar?',
     ctaText:'Preparamos informações para ajudar você a compreender os primeiros passos e identificar o que precisa descobrir antes de avançar.',
-    ctaPrimaryLabel:'QUERO ENTENDER OS PRÓXIMOS PASSOS',
-    ctaPrimaryTarget:'grade2',
-    ctaMicrocopy:'',
-    ctaSecondaryLabel:'Ainda quero falar com a equipe',
-    ctaSecondaryTarget:'grade1',
     finalMessage:'Nem todo processo começa com documentos prontos ou todas as respostas. Às vezes, o primeiro passo é descobrir quais perguntas precisam ser respondidas.'
   }
 };
@@ -426,9 +412,27 @@ function dynamicInsights(){
   return insights.slice(0,2);
 }
 
-function goTo(targetKey,total,priorityName,grade){
-  const target = targetKey==='grade2' ? CONFIG.redirects.grade2 : CONFIG.redirects.grade1;
+function redirectToDestination(total,priorityName,grade){
+  const target = grade==='Grau 1' ? CONFIG.redirects.grade1 : CONFIG.redirects.grade2;
   location.assign(preserveParams(target,total,priorityName,grade));
+}
+
+function startRedirectCountdown(total,priorityName,grade){
+  let remaining = CONFIG.redirectSeconds;
+  $('countdownSeconds').textContent = remaining;
+  $('redirectProgressFill').style.width = '0%';
+  requestAnimationFrame(()=>{
+    $('redirectProgressFill').style.transition = `width ${CONFIG.redirectSeconds*1000}ms linear`;
+    $('redirectProgressFill').style.width = '100%';
+  });
+  const interval = setInterval(()=>{
+    remaining -= 1;
+    $('countdownSeconds').textContent = Math.max(remaining,0);
+    if(remaining<=0){
+      clearInterval(interval);
+      redirectToDestination(total,priorityName,grade);
+    }
+  },1000);
 }
 
 function showConclusion(total,priorityName,grade){
@@ -467,16 +471,10 @@ function showConclusion(total,priorityName,grade){
 
   $('ctaTitle').textContent = data.ctaTitle;
   $('ctaText').textContent = data.ctaText;
-  $('ctaPrimary').textContent = data.ctaPrimaryLabel;
-  $('ctaMicrocopy').textContent = data.ctaMicrocopy;
-  $('ctaMicrocopy').classList.toggle('hidden', !data.ctaMicrocopy);
-  $('ctaPrimary').onclick = ()=>goTo(data.ctaPrimaryTarget,total,priorityName,grade);
-
-  $('ctaSecondary').textContent = data.ctaSecondaryLabel;
-  $('ctaSecondary').classList.toggle('hidden', !data.ctaSecondaryLabel);
-  $('ctaSecondary').onclick = ()=>goTo(data.ctaSecondaryTarget,total,priorityName,grade);
 
   $('conclusionFinal').textContent = data.finalMessage;
+
+  startRedirectCountdown(total,priorityName,grade);
 }
 
 function runAnalysisSequence(){
