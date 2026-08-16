@@ -21,6 +21,84 @@ const ICONS = {
   idade:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.2"/><path d="M5.5 19c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/></svg>'
 };
 
+const CONCLUSION_ICONS = {
+  alta:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9 12.4l2.1 2.1L15.5 10"/></svg>',
+  media:'<svg viewBox="0 0 24 24"><circle cx="10.3" cy="10.3" r="6.1"/><path d="M14.9 14.9l4.8 4.8"/></svg>',
+  baixa:'<svg viewBox="0 0 24 24"><path d="M9 4.5L4 6.5v13l5-2 6 2 5-2v-13l-5 2-6-2z"/><path d="M9 4.5v13M15 6.5v13"/></svg>'
+};
+
+const CONCLUSIONS = {
+  alta:{
+    headline:name=>`${name}, seu cenário indica um bom momento para avançar.`,
+    headlineGeneric:'Seu cenário indica um bom momento para avançar.',
+    subheadline:'Pelas suas respostas, você reúne importantes sinais de potencial para seguir para uma análise mais detalhada da sua cidadania italiana. Agora, o próximo passo é confirmar os detalhes do seu caso e entender qual caminho faz mais sentido para você e sua família.',
+    diagnosis:[
+      {mark:'check',text:'Existe vínculo familiar informado'},
+      {mark:'check',text:'Há intenção de avançar no processo'},
+      {mark:'check',text:'Seu momento indica boa possibilidade de continuidade'},
+      {mark:'check',text:'Você demonstrou condições para dar os próximos passos'}
+    ],
+    result:'Resultado: seu perfil está entre os que merecem uma análise prioritária.',
+    tensionTitle:'Você está em um bom ponto. Agora os detalhes fazem diferença.',
+    tensionText:'Mesmo em casos aparentemente favoráveis, detalhes como linha de descendência, datas, documentos, registros e estratégia do processo podem alterar o caminho necessário. Por isso, antes de iniciar ou investir no processo, vale confirmar tecnicamente essas informações.',
+    ctaTitle:'Converse com um especialista da Gioppo & Conti',
+    ctaText:'Nossa equipe pode analisar as informações iniciais do seu caso, esclarecer os próximos passos e indicar o caminho mais adequado.',
+    ctaPrimaryLabel:'QUERO ANALISAR MEU CASO',
+    ctaPrimaryTarget:'grade1',
+    ctaMicrocopy:'Leva apenas alguns minutos para dar o próximo passo.',
+    ctaSecondaryLabel:'Entender melhor meu diagnóstico',
+    ctaSecondaryTarget:'grade1',
+    finalMessage:'Você já deu o primeiro passo. Agora é hora de transformar informações iniciais em uma análise concreta do seu caso.'
+  },
+  media:{
+    headline:name=>`${name}, você está no caminho — mas alguns pontos ainda precisam ser esclarecidos.`,
+    headlineGeneric:'Você está no caminho — mas alguns pontos ainda precisam ser esclarecidos.',
+    subheadline:'Suas respostas mostram que há elementos importantes para continuar investigando sua cidadania italiana, mas alguns detalhes ainda precisam ser confirmados antes de definir o melhor caminho. E é justamente nessa etapa que uma análise especializada pode evitar decisões baseadas em informações incompletas.',
+    diagnosis:[
+      {mark:'check',text:'Existem sinais que justificam continuar a análise'},
+      {mark:'check',text:'Seu caso ainda pode apresentar boas possibilidades'},
+      {mark:'warn',text:'Há informações que precisam ser confirmadas'},
+      {mark:'warn',text:'O próximo passo depende de entender melhor alguns detalhes'}
+    ],
+    result:'Resultado: o que separa um caso possível de uma dúvida costuma ser pouca coisa a esclarecer.',
+    tensionTitle:'Um detalhe pode mudar o caminho do processo.',
+    tensionText:'Não ter todos os documentos, não conhecer exatamente a linha familiar ou ainda estar organizando o investimento não significa que você não possa avançar. Por outro lado, seguir sem entender esses pontos pode gerar busca desnecessária de documentos, escolha de um caminho inadequado, atrasos, custos que poderiam ser evitados e expectativas incorretas sobre o processo.',
+    extra:{
+      title:'Talvez falte menos do que parece.',
+      text:'Em muitos casos, o que separa uma dúvida de um processo possível é simplesmente descobrir qual informação precisa ser encontrada primeiro. A Gioppo & Conti pode ajudar a identificar isso.'
+    },
+    ctaTitle:'Descubra o que ainda falta no seu caso',
+    ctaText:'Converse com nossa equipe para entender quais pontos precisam ser esclarecidos e quais podem ser os próximos passos.',
+    ctaPrimaryLabel:'QUERO ENTENDER MEU CASO',
+    ctaPrimaryTarget:'grade1',
+    ctaMicrocopy:'Uma análise inicial pode ajudar a identificar o que precisa ser resolvido primeiro.',
+    ctaSecondaryLabel:'Ver informações importantes antes de continuar',
+    ctaSecondaryTarget:'grade1',
+    finalMessage:'Seu diagnóstico não terminou em um "sim" ou "não". Ele mostrou onde precisamos olhar com mais atenção.'
+  },
+  baixa:{
+    headline:name=>`${name}, neste momento ainda faltam informações para indicar um caminho claro.`,
+    headlineGeneric:'Neste momento, ainda faltam informações para indicar um caminho claro.',
+    subheadline:'Pelas respostas do seu diagnóstico, ainda existem pontos importantes que precisam ser esclarecidos ou desenvolvidos antes de pensar nos próximos passos da cidadania italiana. Isso não significa necessariamente que todas as possibilidades estejam encerradas — significa que, neste momento, precisamos começar por uma etapa anterior.',
+    diagnosis:[
+      {mark:'warn',text:'Existem informações fundamentais ainda não confirmadas'},
+      {mark:'warn',text:'Seu momento atual pode exigir preparação antes de avançar'},
+      {mark:'warn',text:'É importante entender primeiro quais possibilidades realmente existem'}
+    ],
+    result:'Resultado: o primeiro passo pode ser simplesmente entender melhor o seu cenário.',
+    tensionTitle:'O primeiro passo pode ser simplesmente entender melhor o seu cenário.',
+    tensionText:'Talvez seja necessário investigar a origem familiar, localizar informações, compreender os requisitos ou se preparar melhor antes de iniciar qualquer processo. O importante é não tomar uma decisão baseada apenas em suposições.',
+    ctaTitle:'Quer entender melhor por onde começar?',
+    ctaText:'Preparamos informações para ajudar você a compreender os primeiros passos e identificar o que precisa descobrir antes de avançar.',
+    ctaPrimaryLabel:'QUERO ENTENDER OS PRÓXIMOS PASSOS',
+    ctaPrimaryTarget:'grade2',
+    ctaMicrocopy:'',
+    ctaSecondaryLabel:'Ainda quero falar com a equipe',
+    ctaSecondaryTarget:'grade1',
+    finalMessage:'Nem todo processo começa com documentos prontos ou todas as respostas. Às vezes, o primeiro passo é descobrir quais perguntas precisam ser respondidas.'
+  }
+};
+
 const FEEDBACK = {
   documentos: {
     title: 'Tudo certo.',
@@ -325,6 +403,82 @@ function preserveParams(target,total,priorityName,grade){
   return url.toString();
 }
 
+function conclusionKey(priorityName){
+  if(priorityName==='Alta') return 'alta';
+  if(priorityName==='Média') return 'media';
+  return 'baixa';
+}
+
+function dynamicInsights(){
+  const insights=[];
+  const doc=answers.documentos?.label;
+  if(doc==='Ainda não tenho os documentos'||doc==='Não sei quais documentos são necessários'){
+    insights.push({mark:'warn',text:'Documentação ainda não localizada — isso não encerra a possibilidade de avançar. A localização de documentos pode fazer parte das próximas etapas.'});
+  }
+  const fam=answers.familiares?.label;
+  if(fam==='Sim'||fam==='Talvez, ainda estou avaliando'){
+    insights.push({mark:'check',text:'Processo em família — você informou que outras pessoas podem participar. Isso é importante para a análise da estratégia e dos custos envolvidos.'});
+  }
+  const momento=answers.momento?.label;
+  if(momento==='Já decidi e quero começar o quanto antes'){
+    insights.push({mark:'check',text:'Momento de decisão próximo — como você pretende avançar em breve, vale esclarecer os pontos técnicos antes de tomar decisões.'});
+  }
+  return insights.slice(0,2);
+}
+
+function goTo(targetKey,total,priorityName,grade){
+  const target = targetKey==='grade2' ? CONFIG.redirects.grade2 : CONFIG.redirects.grade1;
+  location.assign(preserveParams(target,total,priorityName,grade));
+}
+
+function showConclusion(total,priorityName,grade){
+  const key = conclusionKey(priorityName);
+  const data = CONCLUSIONS[key];
+  const firstname = params.get('firstname')||'';
+
+  $('stepLabel').textContent = 'Diagnóstico concluído';
+  $('analysisView').classList.add('hidden');
+  $('conclusionView').classList.remove('hidden');
+
+  $('conclusionIcon').innerHTML = CONCLUSION_ICONS[key];
+  $('conclusionHeadline').textContent = firstname ? data.headline(firstname) : data.headlineGeneric;
+  $('conclusionSubheadline').textContent = data.subheadline;
+
+  const list = $('diagnosisList');
+  list.innerHTML='';
+  [...data.diagnosis, ...dynamicInsights()].forEach(item=>{
+    const li = document.createElement('li');
+    li.className='diagnosis-item';
+    li.innerHTML = `<span class="mark">${item.mark==='warn'?'!':'✓'}</span><span>${item.text}</span>`;
+    list.appendChild(li);
+  });
+  $('diagnosisResult').textContent = data.result;
+
+  $('tensionTitle').textContent = data.tensionTitle;
+  $('tensionText').textContent = data.tensionText;
+
+  if(data.extra){
+    $('extraBlock').classList.remove('hidden');
+    $('extraTitle').textContent = data.extra.title;
+    $('extraText').textContent = data.extra.text;
+  }else{
+    $('extraBlock').classList.add('hidden');
+  }
+
+  $('ctaTitle').textContent = data.ctaTitle;
+  $('ctaText').textContent = data.ctaText;
+  $('ctaPrimary').textContent = data.ctaPrimaryLabel;
+  $('ctaMicrocopy').textContent = data.ctaMicrocopy;
+  $('ctaMicrocopy').classList.toggle('hidden', !data.ctaMicrocopy);
+  $('ctaPrimary').onclick = ()=>goTo(data.ctaPrimaryTarget,total,priorityName,grade);
+
+  $('ctaSecondary').textContent = data.ctaSecondaryLabel;
+  $('ctaSecondary').classList.toggle('hidden', !data.ctaSecondaryLabel);
+  $('ctaSecondary').onclick = ()=>goTo(data.ctaSecondaryTarget,total,priorityName,grade);
+
+  $('conclusionFinal').textContent = data.finalMessage;
+}
+
 function runAnalysisSequence(){
   const items = document.querySelectorAll('#analysisChecklist .check-item');
   const stepDelay = CONFIG.analysisMs/(items.length+1);
@@ -362,9 +516,8 @@ async function finish(){
     sessionStorage.setItem('quiz_hubspot_error',String(err));
   }
 
-  const target=grade==='Grau 1'?CONFIG.redirects.grade1:CONFIG.redirects.grade2;
   setTimeout(()=>{
-    location.assign(preserveParams(target,total,priorityName,grade));
+    showConclusion(total,priorityName,grade);
   },CONFIG.analysisMs);
 }
 

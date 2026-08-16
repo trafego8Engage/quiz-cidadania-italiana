@@ -97,6 +97,41 @@ h2{font-size:clamp(22px,3.4vw,28px)}
 .analysis-checklist .check-item.visible .mark{visibility:visible}
 .analysis-progress{margin-top:26px}
 
+/* Conclusion view */
+.conclusion-view{max-width:640px;margin:0 auto;text-align:center;padding:10px 0 6px}
+.conclusion-logo{height:22px;margin:0 auto 22px;display:block}
+.conclusion-badge{display:inline-flex;align-items:center;margin:0 auto 20px;padding:6px 14px;border:1px solid rgba(181,18,42,.35);border-radius:999px;background:#150c0d;color:var(--color-primary);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.conclusion-icon{margin:0 auto 22px}
+.conclusion-sub{color:var(--color-text-secondary);line-height:1.6;margin:0 auto 26px;max-width:560px;font-size:15px}
+
+.diagnosis-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:28px 32px;text-align:left;margin:0 auto 16px;max-width:560px}
+.diagnosis-title{margin:0 0 14px;text-transform:uppercase;letter-spacing:.12em;font-size:.74rem;font-weight:700;color:var(--color-text-muted)}
+.diagnosis-list{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:10px}
+.diagnosis-item{display:flex;align-items:flex-start;gap:10px;color:var(--color-text-secondary);font-size:15px;line-height:1.5}
+.diagnosis-item .mark{color:var(--color-primary);font-weight:700;flex:none}
+.diagnosis-result{margin:0;padding-top:14px;border-top:1px solid var(--color-border);color:var(--color-text);font-weight:600;font-size:15px;line-height:1.5}
+
+.diagnosis-disclaimer{max-width:560px;margin:0 auto 32px;color:var(--color-text-muted);font-size:13px;line-height:1.5}
+
+.tension-block{max-width:600px;margin:0 auto 28px}
+.tension-block h2{margin-bottom:10px}
+.tension-block p,.extra-block p{color:var(--color-text-secondary);line-height:1.6;margin:0}
+.extra-block{max-width:600px;margin:0 auto 28px}
+.extra-block h2{margin-bottom:10px}
+
+.conclusion-cta-block{max-width:520px;margin:0 auto 6px}
+.conclusion-cta-block h3{margin:0 0 8px;font-family:"Playfair Display",Georgia,serif;font-weight:500;font-size:20px}
+.conclusion-cta-block p{color:var(--color-text-secondary);margin:0 0 22px;line-height:1.55}
+.cta-primary{min-height:58px;width:100%;max-width:420px;margin:0 auto;padding:0 32px;font-size:16px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.cta-microcopy{margin:12px 0 0!important;font-size:13px;color:var(--color-text-muted)!important}
+
+.cta-secondary{display:block;margin:18px auto 0;background:transparent;border:0;color:var(--color-text-muted);font-size:.92rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.cta-secondary:hover{color:var(--color-text-secondary)}
+.cta-secondary.hidden{display:none}
+
+.conclusion-final{max-width:560px;margin:32px auto 4px;color:var(--color-text-secondary);font-style:italic;line-height:1.6;font-size:14.5px}
+.conclusion-footer{margin-top:22px;color:var(--color-text-muted);font-size:12px}
+
 .hidden{display:none!important}
 @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -111,6 +146,8 @@ h2{font-size:clamp(22px,3.4vw,28px)}
   .option{min-height:60px;padding:14px 16px;font-size:17px}
   .multi-controls{align-items:stretch;flex-direction:column}
   .next-button{width:100%}
+  .diagnosis-card{padding:20px 22px}
+  .conclusion-cta-block h3{font-size:19px}
 }
 
 @media (prefers-reduced-motion:reduce){
