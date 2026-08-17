@@ -237,7 +237,7 @@ const CONFIG = {
     grade1: 'https://lp.gioppoeconti.com.br/obrigado-grau-1/',
     grade2: 'https://lp.gioppoeconti.com.br/obrigado-grau-2/'
   },
-  hubspot: { portalId: '', formGuid: '' },
+  hubspot: { portalId: '51117535', formGuid: '44ad0787-1f00-4df5-9114-9a2624e36064' },
   transitionMs: 220,
   feedbackMs: 4500,
   analysisMs: 2600,
@@ -352,7 +352,7 @@ const questions = [
     id:'parentesco',
     title:'Qual era o grau de parentesco desse antepassado italiano?',
     help:'Se você ainda não souber exatamente, pode marcar a última opção.',
-    property:'n1_qual_o_grau_de_parentesco_entre_voce_e_o_italiano',
+    property:'quiz02_grau_parentesco',
     options:[
       ['Pai ou mãe',15],
       ['Avô ou avó',15],
@@ -377,7 +377,7 @@ const questions = [
     id:'objetivos',
     title:'O que você busca com a cidadania italiana?',
     help:'Você pode escolher até 5 opções.',
-    property:'qual_e_o_seu_principal_interesse_com_a_cidadania_italiana',
+    property:'quiz02_interesse_cidadania',
     type:'multi',
     maxSelections:5,
     maxPoints:5,
