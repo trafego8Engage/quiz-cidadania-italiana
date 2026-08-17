@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/diagnostico-alta", "destination": "/index.html" },
+    { "source": "/diagnostico-media", "destination": "/index.html" },
+    { "source": "/diagnostico-baixa", "destination": "/index.html" }
+  ]
+}

@@ -123,6 +123,8 @@ h2{font-size:clamp(22px,3.4vw,28px)}
 .conclusion-cta-block h3{margin:0 0 8px;font-family:"Playfair Display",Georgia,serif;font-weight:500;font-size:20px;color:var(--color-text)}
 .conclusion-cta-block p{color:var(--color-text-secondary);margin:0 0 22px;line-height:1.55}
 
+.conclusion-cta-button{width:100%;min-height:56px;font-size:16px;margin-bottom:18px}
+
 .redirect-countdown{margin-top:4px}
 .redirect-text{color:var(--color-text-secondary);font-size:15px;margin:0 0 14px!important}
 .redirect-text #countdownSeconds{color:var(--color-primary);font-weight:700}

@@ -6,7 +6,7 @@ const CONFIG = {
   },
   hubspot: { portalId: '', formGuid: '' },
   transitionMs: 220,
-  feedbackMs: 1800,
+  feedbackMs: 4500,
   analysisMs: 2600,
   redirectSeconds: 15
 };
@@ -44,6 +44,7 @@ const CONCLUSIONS = {
     tensionText:'Mesmo em casos aparentemente favoráveis, detalhes como linha de descendência, datas, documentos, registros e estratégia do processo podem alterar o caminho necessário. Por isso, antes de iniciar ou investir no processo, vale confirmar tecnicamente essas informações.',
     ctaTitle:'Converse com um especialista da Gioppo & Conti',
     ctaText:'Nossa equipe vai analisar as informações iniciais do seu caso, esclarecer os próximos passos e indicar o caminho mais adequado.',
+    ctaButtonLabel:'Quero confirmar meu caso agora',
     finalMessage:'Você já deu o primeiro passo. Agora é hora de transformar informações iniciais em uma análise concreta do seu caso.'
   },
   media:{
@@ -65,6 +66,7 @@ const CONCLUSIONS = {
     },
     ctaTitle:'Descubra o que ainda falta no seu caso',
     ctaText:'Nossa equipe vai te ajudar a entender quais pontos precisam ser esclarecidos e quais podem ser os próximos passos.',
+    ctaButtonLabel:'Quero esclarecer meu caso agora',
     finalMessage:'Seu diagnóstico não terminou em um "sim" ou "não". Ele mostrou onde precisamos olhar com mais atenção.'
   },
   baixa:{
@@ -81,6 +83,7 @@ const CONCLUSIONS = {
     tensionText:'Talvez seja necessário investigar a origem familiar, localizar informações, compreender os requisitos ou se preparar melhor antes de iniciar qualquer processo. O importante é não tomar uma decisão baseada apenas em suposições.',
     ctaTitle:'Quer entender melhor por onde começar?',
     ctaText:'Preparamos informações para ajudar você a compreender os primeiros passos e identificar o que precisa descobrir antes de avançar.',
+    ctaButtonLabel:'Quero entender meus próximos passos',
     finalMessage:'Nem todo processo começa com documentos prontos ou todas as respostas. Às vezes, o primeiro passo é descobrir quais perguntas precisam ser respondidas.'
   }
 };
@@ -93,6 +96,10 @@ const FEEDBACK = {
   familiares: {
     title: 'Interessante.',
     text: 'Em alguns casos, realizar o processo em família pode ajudar a compartilhar parte dos custos.'
+  },
+  idade: {
+    title: 'Perfeito, já temos o que precisamos.',
+    text: 'Com base em tudo que você respondeu, vamos preparar agora o seu diagnóstico personalizado.'
   }
 };
 
@@ -412,6 +419,9 @@ function dynamicInsights(){
   return insights.slice(0,2);
 }
 
+let redirectInterval = null;
+let conclusionContext = null;
+
 function redirectToDestination(total,priorityName,grade){
   const target = grade==='Grau 1' ? CONFIG.redirects.grade1 : CONFIG.redirects.grade2;
   location.assign(preserveParams(target,total,priorityName,grade));
@@ -425,20 +435,26 @@ function startRedirectCountdown(total,priorityName,grade){
     $('redirectProgressFill').style.transition = `width ${CONFIG.redirectSeconds*1000}ms linear`;
     $('redirectProgressFill').style.width = '100%';
   });
-  const interval = setInterval(()=>{
+  redirectInterval = setInterval(()=>{
     remaining -= 1;
     $('countdownSeconds').textContent = Math.max(remaining,0);
     if(remaining<=0){
-      clearInterval(interval);
+      clearInterval(redirectInterval);
       redirectToDestination(total,priorityName,grade);
     }
   },1000);
 }
 
-function showConclusion(total,priorityName,grade){
+$('conclusionCtaButton').onclick=()=>{
+  if(redirectInterval) clearInterval(redirectInterval);
+  if(conclusionContext) redirectToDestination(conclusionContext.total,conclusionContext.priorityName,conclusionContext.grade);
+};
+
+function showConclusion(total,priorityName,grade,options={}){
   const key = conclusionKey(priorityName);
   const data = CONCLUSIONS[key];
   const firstname = params.get('firstname')||'';
+  conclusionContext = {total,priorityName,grade};
 
   $('stepLabel').textContent = 'Diagnóstico concluído';
   $('analysisView').classList.add('hidden');
@@ -471,10 +487,14 @@ function showConclusion(total,priorityName,grade){
 
   $('ctaTitle').textContent = data.ctaTitle;
   $('ctaText').textContent = data.ctaText;
+  $('conclusionCtaButton').textContent = data.ctaButtonLabel;
 
   $('conclusionFinal').textContent = data.finalMessage;
 
-  startRedirectCountdown(total,priorityName,grade);
+  $('redirectCountdown').classList.toggle('hidden', !!options.preview);
+  if(!options.preview){
+    startRedirectCountdown(total,priorityName,grade);
+  }
 }
 
 function runAnalysisSequence(){
@@ -519,4 +539,32 @@ async function finish(){
   },CONFIG.analysisMs);
 }
 
-render();
+// Modo preview: URLs provisórias pra o time de copy revisar as 3 telas de
+// conclusão direto, sem precisar responder o quiz inteiro. Detecta via
+// ?preview=alta|media|baixa (funciona em qualquer host) ou via path
+// /diagnostico-alta|media|baixa (funciona no Vercel, ver vercel.json).
+function getPreviewKey(){
+  const fromQuery = params.get('preview');
+  if(fromQuery && CONCLUSIONS[fromQuery]) return fromQuery;
+  const path = location.pathname.toLowerCase();
+  if(path.includes('diagnostico-alta')) return 'alta';
+  if(path.includes('diagnostico-media')) return 'media';
+  if(path.includes('diagnostico-baixa')) return 'baixa';
+  return null;
+}
+
+function startPreview(key){
+  const priorityName = key==='alta' ? 'Alta' : key==='media' ? 'Média' : 'Baixa';
+  const grade = destination(priorityName);
+  const fakeTotal = key==='alta' ? 70 : key==='media' ? 45 : 20;
+  $('quizView').classList.add('hidden');
+  $('progressFill').style.width = '100%';
+  showConclusion(fakeTotal,priorityName,grade,{preview:true});
+}
+
+const previewKey = getPreviewKey();
+if(previewKey){
+  startPreview(previewKey);
+}else{
+  render();
+}
