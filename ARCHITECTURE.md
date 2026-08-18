@@ -101,6 +101,11 @@ paginas_conclusao_quiz_cidadania_gioppo_conti.md
                          # doc de referência/spec das 3 conclusões — NUNCA
                          # entra no git (fica sempre untracked, por pedido
                          # explícito do usuário), é só apoio local
+.env                       # credenciais (login wp-admin do claude-temp,
+                         # token do app privado do HubSpot) — NUNCA entra
+                         # no git (.gitignore), usado só por scripts de
+                         # automação ad-hoc durante sessões (não é lido
+                         # pelo app.js nem pelo build.js)
 ```
 
 ## Preview das telas de conclusão pro time de copy
@@ -149,13 +154,98 @@ isso o bundle:
 | Redirecionamento automático + botão manual | ✅ feito | contagem regressiva de 15s (`CONFIG.redirectSeconds`) **e** botão `#conclusionCtaButton` que redireciona na hora — ver decisão revisada em [PASSAGEM-DE-PLANTAO.md](PASSAGEM-DE-PLANTAO.md) |
 | Preview das 3 conclusões pro time de copy | ✅ feito | provisório, ver seção acima — `?preview=` ou `/diagnostico-alta|media|baixa` |
 | Compatibilidade com a captura de lead do funil real | ✅ confirmado | `contactFields()` já lê `firstname`/`email`/`hs_whatsapp_phone_number`, exatamente os params que `/diagnostico-a/` e `/diagnostico-c/` mandam via JS após o form HubSpot |
-| Envio das respostas do quiz pro HubSpot | ✅ feito (2026-08-17) | `CONFIG.hubspot` preenchido (`portalId: '51117535'`, `formGuid: '44ad0787-1f00-4df5-9114-9a2624e36064'`). Formulário e 11 propriedades de contato criados via API — detalhe completo em [HUBSPOT-SETUP.md](HUBSPOT-SETUP.md). Falta só um teste de ponta a ponta (submissão real) pra confirmar |
+| Envio das respostas do quiz pro HubSpot | ✅ feito (2026-08-17) | `CONFIG.hubspot` preenchido (`portalId: '51117535'`, `formGuid: '44ad0787-1f00-4df5-9114-9a2624e36064'`). Formulário e 11 propriedades de contato criados via API — detalhe completo em [HUBSPOT-SETUP.md](HUBSPOT-SETUP.md) |
+| Roteamento de lead pro comercial (dono + negócio) | ✅ feito, ⚠️ reinscrição quebrada | workflows "Funil diagnostico" e "Webhook — dashboard" reconfigurados pro quiz novo (2026-08-18). Bug de criação de Negócio corrigido (ver [Armadilhas conhecidas](#armadilhas-conhecidas)). Pendência: reinscrição do mesmo contato não dispara o workflow de novo — ver [PASSAGEM-DE-PLANTAO.md](PASSAGEM-DE-PLANTAO.md) |
 | Dashboard que consome esses dados pós-HubSpot | ✅ feito, em outro repositório (CR8) | webhook → lead score → aba "Funil Diagnóstico" no Portal do Cliente. Ver [CR8-DASHBOARD-ARQUITETURA.md](CR8-DASHBOARD-ARQUITETURA.md) — inclui uma armadilha relevante: o score que o CR8 mostra **não é** o mesmo cálculo do `CONFIG.thresholds` deste `app.js` |
 | Publicação no domínio real da Gioppo & Conti | ✅ feito (2026-08-18) | página `/quizdiagnostico-02/` publicada (post ID 3373), com o rodapé do tema desativado via "Opções do Neve". Páginas `/diagnostico-a/` (post 3261), `/diagnostico-b/` (post 3262) e `/diagnostico-c/` (post 3263) já redirecionam pra ela em vez do quiz antigo |
 | Destino "Lead Desqualificado" (`/obrigado-dq/`) | 🚫 decidido não usar por enquanto | página existe em produção, mas `app.js` não redireciona pra ela — decisão explícita do usuário (2026-08-16), não é bug. Ver [Armadilhas conhecidas](#armadilhas-conhecidas) |
 | Senha de Aplicativo / acesso via API ao WordPress | ❌ bloqueado | bloqueio de hospedagem (Hostinger), não é algo resolvível via `wp-admin`; ver armadilha correspondente |
 
 ## Armadilhas conhecidas
+
+### Criação de Negócio no workflow "Funil diagnostico" falhava sem Empresa associada
+- **Sintoma**: contato recebe dono (`hubspot_owner_id`) normalmente, mas
+  nenhum Negócio é criado — sem erro visível em lugar nenhum.
+- **Causa raiz**: a ação de criar o Negócio (actionId `1`, actionTypeId
+  `0-14`, no flow v4 `1834403429`) tinha uma associação do tipo
+  `COPY_ASSOCIATION` (target associationTypeId `341` = Negócio→Empresa,
+  source associationTypeId `279` = provavelmente Contato→Empresa) que
+  tenta copiar a empresa associada ao contato pro negócio novo. Quando o
+  contato não tem nenhuma Empresa associada — o caso da maioria dos leads
+  desse negócio, que são pessoas físicas — essa cópia falha e derruba a
+  ação inteira (o Negócio simplesmente não é criado). Provavelmente já
+  acontecia com o quiz antigo também, silenciosamente, antes desta sessão.
+- **Fix**: removida a associação `COPY_ASSOCIATION` (target `341`) do
+  array `fields.associations` da ação, via `PUT
+  /automation/v4/flows/{flowId}` (API v4 de Flows). Mantida só a
+  associação `ENROLLED_OBJECT` (target `3`, contato→negócio). Confirmado
+  com teste limpo.
+- **Como aplicar**: se algum dia precisar reativar vínculo automático de
+  negócio↔empresa nesse workflow, fazer isso como uma ação condicional
+  separada (só quando o contato de fato tem empresa associada), não como
+  parte obrigatória da criação do Negócio.
+
+### Editar um widget de Formulário do Elementor via automação de navegador não funciona pela UI — usar a API JS interna
+- **Sintoma**: clicar no widget de Formulário (Elementor Pro) dentro do
+  editor visual (`?action=elementor`) não abre o painel de configurações
+  à esquerda — o painel continua mostrando a lista de "Elementos", mesmo
+  depois de clicar direto no widget, no ícone de editar, ou no item
+  correspondente na árvore de Estrutura. Widgets simples (ex. "HTML
+  personalizado") **não** têm esse problema — abrem o painel normalmente.
+- **Causa raiz**: não totalmente identificada — parece uma incompatibilidade
+  específica do widget de Formulário do Elementor Pro com o "editor
+  atômico" (versão nova do editor do Elementor, ativada por padrão nessa
+  instalação). Não encontramos um toggle pra voltar ao editor clássico.
+- **Fix / caminho que funcionou**: em vez de interagir pela UI, usar a API
+  JS interna do Elementor, acessível via `window.elementor` dentro da
+  página principal do editor (não do iframe de preview):
+  ```js
+  function findWidgets(collection, out) {
+    collection.each(model => {
+      if (model.get('widgetType')) out.push(model);
+      const children = model.get('elements');
+      if (children && children.length) findWidgets(children, out);
+    });
+  }
+  const found = [];
+  findWidgets(window.elementor.elements, found);
+  const formModel = found.find(m => m.get('widgetType') === 'form');
+  const settings = formModel.get('settings');
+  settings.set('redirect_to', novoValor); // ou qualquer outro campo
+  window.elementor.saver.setFlagEditorChange(true); // ativa o botão "Publicar"
+  ```
+  Depois só clicar no botão "Publicar" normalmente. Pra descobrir o nome
+  exato do campo a editar, inspecionar `settings.attributes` (objeto com
+  todas as configurações do widget) antes de decidir o que mudar.
+- **Como aplicar**: se precisar editar outro widget de Formulário
+  Elementor no futuro (ou qualquer outro widget que tenha esse mesmo
+  problema de painel não abrir), usar essa técnica em vez de insistir em
+  clicar pela UI.
+
+### API de Flows do HubSpot (v4) — retorna 400 genérico sem detalhe do campo inválido
+- **Sintoma**: `PUT /automation/v4/flows/{id}` retorna
+  `{"category":"BAD_REQUEST","subCategory":"FlowApiStandardFriendlyError.FLOW_UPDATE_BAD_REQUEST"}`
+  sem indicar qual campo do payload é inválido.
+- **Causa raiz conhecida em parte**: o payload de `PUT` precisa do objeto
+  **completo** do flow (não aceita atualização parcial) — remover `id`,
+  `createdAt`, `updatedAt` antes de enviar (são somente-leitura), mas
+  manter todo o resto, incluindo `actions` e `enrollmentCriteria`
+  completos mesmo que só um campo tenha mudado. Isolar qual mudança
+  específica causa o 400 exige testar uma alteração de cada vez (foi assim
+  que descobrimos, por exemplo, que `listFilterBranch` exige uma raiz do
+  tipo `OR` com pelo menos um ramo aninhado do tipo `AND` dentro —
+  `ListError.INVALID_BASE_FILTER_BRANCH` foi o único erro desta sessão que
+  veio com detalhe útil).
+- **Pendência**: não conseguimos descobrir o formato exato esperado por
+  `enrollmentCriteria.reEnrollmentTriggersFilterBranches` — ficou vazio
+  (`[]`) depois de uma correção de outro erro, e uma tentativa de
+  repopular com a mesma estrutura do branch principal (que funciona em
+  `listFilterBranch`) retornou 400 sem detalhe. Ver pendência
+  correspondente em [PASSAGEM-DE-PLANTAO.md](PASSAGEM-DE-PLANTAO.md).
+- **Como aplicar**: ao editar um flow via API, sempre fazer mudanças
+  pequenas e isoladas (uma de cada vez), testando entre elas — o único
+  jeito viável de isolar qual parte do payload está causando um 400 sem
+  detalhe.
 
 ### WP Rocket ("Atrasar execução de JavaScript") quebra o `render()` inicial do quiz
 - **Sintoma**: o quiz publicado no WordPress trava no Passo 1 — aparecem o
