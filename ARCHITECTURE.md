@@ -150,11 +150,56 @@ isso o bundle:
 | Preview das 3 conclusões pro time de copy | ✅ feito | provisório, ver seção acima — `?preview=` ou `/diagnostico-alta|media|baixa` |
 | Compatibilidade com a captura de lead do funil real | ✅ confirmado | `contactFields()` já lê `firstname`/`email`/`hs_whatsapp_phone_number`, exatamente os params que `/diagnostico-a/` e `/diagnostico-c/` mandam via JS após o form HubSpot |
 | Envio das respostas do quiz pro HubSpot | ✅ feito (2026-08-17) | `CONFIG.hubspot` preenchido (`portalId: '51117535'`, `formGuid: '44ad0787-1f00-4df5-9114-9a2624e36064'`). Formulário e 11 propriedades de contato criados via API — detalhe completo em [HUBSPOT-SETUP.md](HUBSPOT-SETUP.md). Falta só um teste de ponta a ponta (submissão real) pra confirmar |
-| Publicação no domínio real da Gioppo & Conti | ⚠️ parcial | bundle pronto (`wordpress-embed/quiz-embed.html`), mas ainda **não colado** em nenhuma página do WordPress — próximo passo é criar a página e colar o bloco |
+| Dashboard que consome esses dados pós-HubSpot | ✅ feito, em outro repositório (CR8) | webhook → lead score → aba "Funil Diagnóstico" no Portal do Cliente. Ver [CR8-DASHBOARD-ARQUITETURA.md](CR8-DASHBOARD-ARQUITETURA.md) — inclui uma armadilha relevante: o score que o CR8 mostra **não é** o mesmo cálculo do `CONFIG.thresholds` deste `app.js` |
+| Publicação no domínio real da Gioppo & Conti | ✅ feito (2026-08-18) | página `/quizdiagnostico-02/` publicada (post ID 3373), com o rodapé do tema desativado via "Opções do Neve". Páginas `/diagnostico-a/` (post 3261), `/diagnostico-b/` (post 3262) e `/diagnostico-c/` (post 3263) já redirecionam pra ela em vez do quiz antigo |
 | Destino "Lead Desqualificado" (`/obrigado-dq/`) | 🚫 decidido não usar por enquanto | página existe em produção, mas `app.js` não redireciona pra ela — decisão explícita do usuário (2026-08-16), não é bug. Ver [Armadilhas conhecidas](#armadilhas-conhecidas) |
 | Senha de Aplicativo / acesso via API ao WordPress | ❌ bloqueado | bloqueio de hospedagem (Hostinger), não é algo resolvível via `wp-admin`; ver armadilha correspondente |
 
 ## Armadilhas conhecidas
+
+### WP Rocket ("Atrasar execução de JavaScript") quebra o `render()` inicial do quiz
+- **Sintoma**: o quiz publicado no WordPress trava no Passo 1 — aparecem o
+  ícone, o "Passo 1 de 8" e a barra de progresso, mas o título da pergunta,
+  o texto de ajuda e as opções de resposta ficam em branco. Sem erro nenhum
+  no console.
+- **Causa raiz**: o plugin WP Rocket (ativo em produção) tem a opção
+  "Atrasar execução de JavaScript", que reescreve `<script>` pra
+  `type="text/rocketlazyloadscript"` e só executa depois de uma interação
+  do usuário (scroll, clique). O `render()` do quiz roda no carregamento da
+  página, então quando o script é "destravado" tarde demais, parte da
+  função já não produz o efeito esperado (sem lançar exceção — daí o
+  console limpo).
+- **Fix**: em **Configurações → WP Rocket → Otimizar Arquivos → Arquivos
+  JavaScript**, desativar a opção **"Atrasa a execução do JavaScript"**
+  por completo (2026-08-18). Tentamos primeiro soluções mais cirúrgicas —
+  atributos `data-no-optimize`/`data-cfasync`/`data-rocket-no-defer` no
+  `<script>` (não reconhecidos por essa feature específica), depois um
+  campo de exclusão por palavra-chave (`delay_js_exclusions`, não
+  propagava de forma confiável pelo cache do servidor), depois o "Modo
+  Seguro para Atraso na Execução do JavaScript" (mesmo problema de
+  propagação) — nenhuma bastou de forma consistente. Desativar o recurso
+  inteiro foi o que realmente resolveu.
+- **Como aplicar**: se o quiz "travar" de novo dessa forma característica
+  depois de qualquer mudança no WordPress, checar primeiro se alguém
+  reativou "Atrasar execução do JavaScript" no WP Rocket antes de suspeitar
+  do código do quiz.
+
+### Cache do WP Rocket não reflete mudanças imediatamente na URL "limpa"
+- **Sintoma**: uma mudança de configuração do WP Rocket ou de conteúdo da
+  página aparece correta ao acessar a URL com um parâmetro qualquer (ex.
+  `?nocache=123`), mas a URL limpa (sem parâmetros) continua mostrando o
+  comportamento antigo, mesmo depois de "Esvaziar e Pré-carregar o Cache".
+- **Causa raiz**: não totalmente identificada — o purge do WP Rocket nem
+  sempre invalida de forma imediata/consistente a versão cacheada servida
+  pra requisições sem query string (possivelmente uma camada de cache
+  adicional do lado do servidor Hostinger, fora do alcance do `wp-admin`
+  — não temos acesso ao hPanel pra confirmar).
+- **Como aplicar**: pra validar rapidamente se uma mudança já está
+  refletida na origem (sem depender do cache), sempre testar primeiro com
+  `curl "URL?nocache=$(date +%s)"` antes de concluir que algo não
+  funcionou. Se a versão "limpa" continuar desatualizada depois de mais de
+  uma purgada, considerar pedir ao usuário pra purgar manualmente via
+  hPanel, ou aguardar o cache expirar sozinho.
 
 ### CSS vazando pro tema WordPress se colado sem escopo
 - **Sintoma**: se você pegar `styles.css` e colar puro num bloco HTML do
@@ -253,9 +298,10 @@ comando manual.
 | O quê | Onde | Confirmado ao vivo em |
 |---|---|---|
 | Quiz (preview/staging) | https://quiz-cidadania-italiana-rtwk.vercel.app/ | 2026-08-16 (via WebFetch, já refletindo a tela de conclusão) |
-| Quiz (produção, WordPress) | ainda não publicado | — |
-| Página de captura de lead A | https://lp.gioppoeconti.com.br/diagnostico-a/ | 2026-08-16 |
-| Página de captura de lead C | https://lp.gioppoeconti.com.br/diagnostico-c/ | 2026-08-16 |
+| Quiz (produção, WordPress) | https://lp.gioppoeconti.com.br/quizdiagnostico-02/ | 2026-08-18 |
+| Página de captura de lead A | https://lp.gioppoeconti.com.br/diagnostico-a/ (redireciona pro quiz02) | 2026-08-18 |
+| Página de captura de lead B | https://lp.gioppoeconti.com.br/diagnostico-b/ (redireciona pro quiz02) | 2026-08-18 |
+| Página de captura de lead C | https://lp.gioppoeconti.com.br/diagnostico-c/ (redireciona pro quiz02) | 2026-08-18 |
 | Obrigado — Grau 1 | https://lp.gioppoeconti.com.br/obrigado-grau-1/ | 2026-08-16 |
 | Obrigado — Grau 2 | https://lp.gioppoeconti.com.br/obrigado-grau-2/ | 2026-08-16 |
 | Obrigado — Desqualificado | https://lp.gioppoeconti.com.br/obrigado-dq/ | 2026-08-16 (existe, não usado pelo quiz) |

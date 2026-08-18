@@ -100,6 +100,11 @@ const mainMarkup = mainMatch[0].replace(/src="logo\.png"/g, `src="${logoDataUri}
 const appJs = fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8');
 
 // ---------- 5) Monta o bundle final ----------
+// data-no-optimize/data-cfasync/data-rocket-no-defer: o WP Rocket (ativo no
+// site de produção) reescreve <script> pra type="text/rocketlazyloadscript"
+// e só executa após interação do usuário — isso quebra o render() inicial
+// do quiz (fica travado no Passo 1, sem título/opções). Esses atributos
+// pedem pro WP Rocket ignorar este script.
 const bundle = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
@@ -112,7 +117,7 @@ ${finalCss}
 ${mainMarkup}
 </div>
 
-<script>
+<script data-no-optimize="1" data-cfasync="false" data-rocket-no-defer>
 ${appJs}
 </script>
 `;
