@@ -2,6 +2,9 @@
   "rewrites": [
     { "source": "/diagnostico-alta", "destination": "/index.html" },
     { "source": "/diagnostico-media", "destination": "/index.html" },
-    { "source": "/diagnostico-baixa", "destination": "/index.html" }
+    { "source": "/diagnostico-baixa", "destination": "/index.html" },
+    { "source": "/resultado-alta", "destination": "/index.html" },
+    { "source": "/resultado-media", "destination": "/index.html" },
+    { "source": "/resultado-baixa", "destination": "/index.html" }
   ]
 }

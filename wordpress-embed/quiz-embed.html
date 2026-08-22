@@ -86,9 +86,11 @@ box-sizing:border-box}
 #gc-quiz-app .analysis-progress{margin-top:26px}
 #gc-quiz-app .conclusion-view{max-width:640px;margin:0 auto;text-align:center;padding:10px 0 6px}
 #gc-quiz-app .conclusion-logo{height:22px;margin:0 auto 22px;display:block}
-#gc-quiz-app .conclusion-badge{display:inline-flex;align-items:center;margin:0 auto 20px;padding:6px 14px;border:1px solid rgba(181,18,42,.35);border-radius:999px;background:#150c0d;color:var(--color-primary);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+#gc-quiz-app .conclusion-badge{display:inline-flex;align-items:center;margin:0 auto 12px;padding:6px 14px;border:1px solid rgba(181,18,42,.35);border-radius:999px;background:#150c0d;color:var(--color-primary);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+#gc-quiz-app .conclusion-hint{margin:0 auto 22px;color:var(--color-text-muted);font-size:13px;line-height:1.5}
 #gc-quiz-app .conclusion-icon{margin:0 auto 22px}
 #gc-quiz-app .conclusion-sub{color:var(--color-text-secondary);line-height:1.6;margin:0 auto 26px;max-width:560px;font-size:15px}
+#gc-quiz-app .conclusion-cta-button-top{max-width:400px;margin:0 auto 10px}
 #gc-quiz-app .diagnosis-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:28px 32px;text-align:left;margin:0 auto 16px;max-width:560px}
 #gc-quiz-app .diagnosis-title{margin:0 0 14px;text-transform:uppercase;letter-spacing:.12em;font-size:.74rem;font-weight:700;color:var(--color-text-muted)}
 #gc-quiz-app .diagnosis-list{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:10px}
@@ -105,10 +107,6 @@ box-sizing:border-box}
 #gc-quiz-app .conclusion-cta-block h3{margin:0 0 8px;font-family:"Playfair Display",Georgia,serif;font-weight:500;font-size:20px;color:var(--color-text)}
 #gc-quiz-app .conclusion-cta-block p{color:var(--color-text-secondary);margin:0 0 22px;line-height:1.55}
 #gc-quiz-app .conclusion-cta-button{width:100%;min-height:56px;font-size:16px;margin-bottom:18px}
-#gc-quiz-app .redirect-countdown{margin-top:4px}
-#gc-quiz-app .redirect-text{color:var(--color-text-secondary);font-size:15px;margin:0 0 14px!important}
-#gc-quiz-app .redirect-text #countdownSeconds{color:var(--color-primary);font-weight:700}
-#gc-quiz-app .redirect-progress{max-width:260px;margin:0 auto}
 #gc-quiz-app .conclusion-final{max-width:560px;margin:32px auto 4px;color:var(--color-text-secondary);font-style:italic;line-height:1.6;font-size:14.5px}
 #gc-quiz-app .conclusion-footer{margin-top:22px;color:var(--color-text-muted);font-size:12px}
 #gc-quiz-app .hidden{display:none!important}
@@ -193,6 +191,8 @@ box-sizing:border-box}
         <div id="conclusionIcon" class="icon-box conclusion-icon"></div>
         <h1 id="conclusionHeadline"></h1>
         <p id="conclusionSubheadline" class="conclusion-sub"></p>
+        <button id="conclusionCtaButtonTop" class="next-button conclusion-cta-button conclusion-cta-button-top" type="button"></button>
+        <p class="conclusion-hint">Ou continue lendo para ver o seu diagnóstico completo abaixo.</p>
 
         <div class="diagnosis-card">
           <p class="diagnosis-title">Seu diagnóstico</p>
@@ -215,12 +215,6 @@ box-sizing:border-box}
           <h3 id="ctaTitle"></h3>
           <p id="ctaText"></p>
           <button id="conclusionCtaButton" class="next-button conclusion-cta-button" type="button"></button>
-          <div id="redirectCountdown" class="redirect-countdown">
-            <p class="redirect-text">Você será redirecionado em <span id="countdownSeconds">15</span> segundos...</p>
-            <div class="progress-track redirect-progress" aria-hidden="true">
-              <div id="redirectProgressFill" class="progress-fill"></div>
-            </div>
-          </div>
         </div>
 
         <p id="conclusionFinal" class="conclusion-final"></p>
@@ -235,13 +229,17 @@ const CONFIG = {
   thresholds: { high: 60, medium: 35 },
   redirects: {
     grade1: 'https://lp.gioppoeconti.com.br/obrigado-grau-1/',
-    grade2: 'https://lp.gioppoeconti.com.br/obrigado-grau-2/'
+    grade2: 'https://lp.gioppoeconti.com.br/obrigado-grau-2/',
+    resultado: {
+      alta: 'https://lp.gioppoeconti.com.br/resultado-alta/',
+      media: 'https://lp.gioppoeconti.com.br/resultado-media/',
+      baixa: 'https://lp.gioppoeconti.com.br/resultado-baixa/'
+    }
   },
   hubspot: { portalId: '51117535', formGuid: '44ad0787-1f00-4df5-9114-9a2624e36064' },
   transitionMs: 220,
   feedbackMs: 4500,
-  analysisMs: 4600,
-  redirectSeconds: 15
+  analysisMs: 4600
 };
 
 const ICONS = {
@@ -620,6 +618,34 @@ async function submitHubSpot(total,priorityName,grade){
   return res.json().catch(()=>({ok:true}));
 }
 
+// Envio "de entrada": dispara assim que o quiz carrega, só com os dados que
+// já vêm da página de captura (nome/e-mail/telefone) — sem nenhuma resposta
+// ainda. Cria/atualiza o contato no HubSpot na hora, sem esperar o quiz
+// terminar. Se a pessoa completar o quiz, submitHubSpot() atualiza o mesmo
+// contato (mesmo e-mail) com quiz_score/quiz_prioridade/quiz_classificacao.
+// Se a pessoa abandonar no meio, o contato fica existindo mas com
+// quiz_prioridade em branco — é esse o sinal que identifica "abandonou".
+async function submitHubSpotStart(){
+  const {portalId,formGuid}=CONFIG.hubspot;
+  if(!portalId||!formGuid) return {skipped:true};
+
+  const fields=Object.entries(contactFields())
+    .filter(([,value])=>value)
+    .map(([name,value])=>({name,value}));
+
+  if(!fields.some(f=>f.name==='email')) return {skipped:true};
+
+  const url=`https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`;
+  const res=await fetch(url,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({fields,context:trackingContext()})
+  });
+
+  if(!res.ok) throw new Error(`HubSpot respondeu ${res.status}`);
+  return res.json().catch(()=>({ok:true}));
+}
+
 function preserveParams(target,total,priorityName,grade){
   const url=new URL(target);
   params.forEach((v,k)=>url.searchParams.set(k,v));
@@ -652,7 +678,6 @@ function dynamicInsights(){
   return insights.slice(0,2);
 }
 
-let redirectInterval = null;
 let conclusionContext = null;
 
 function redirectToDestination(total,priorityName,grade){
@@ -660,30 +685,18 @@ function redirectToDestination(total,priorityName,grade){
   location.assign(preserveParams(target,total,priorityName,grade));
 }
 
-function startRedirectCountdown(total,priorityName,grade){
-  let remaining = CONFIG.redirectSeconds;
-  $('countdownSeconds').textContent = remaining;
-  $('redirectProgressFill').style.width = '0%';
-  requestAnimationFrame(()=>{
-    $('redirectProgressFill').style.transition = `width ${CONFIG.redirectSeconds*1000}ms linear`;
-    $('redirectProgressFill').style.width = '100%';
-  });
-  redirectInterval = setInterval(()=>{
-    remaining -= 1;
-    $('countdownSeconds').textContent = Math.max(remaining,0);
-    if(remaining<=0){
-      clearInterval(redirectInterval);
-      redirectToDestination(total,priorityName,grade);
-    }
-  },1000);
+function redirectToResultado(total,priorityName,grade){
+  const target = CONFIG.redirects.resultado[conclusionKey(priorityName)];
+  location.assign(preserveParams(target,total,priorityName,grade));
 }
 
-$('conclusionCtaButton').onclick=()=>{
-  if(redirectInterval) clearInterval(redirectInterval);
+function handleConclusionCtaClick(){
   if(conclusionContext) redirectToDestination(conclusionContext.total,conclusionContext.priorityName,conclusionContext.grade);
-};
+}
+$('conclusionCtaButton').onclick = handleConclusionCtaClick;
+$('conclusionCtaButtonTop').onclick = handleConclusionCtaClick;
 
-function showConclusion(total,priorityName,grade,options={}){
+function showConclusion(total,priorityName,grade){
   const key = conclusionKey(priorityName);
   const data = CONCLUSIONS[key];
   const firstname = params.get('firstname')||'';
@@ -721,13 +734,9 @@ function showConclusion(total,priorityName,grade,options={}){
   $('ctaTitle').textContent = data.ctaTitle;
   $('ctaText').textContent = data.ctaText;
   $('conclusionCtaButton').textContent = data.ctaButtonLabel;
+  $('conclusionCtaButtonTop').textContent = data.ctaButtonLabel;
 
   $('conclusionFinal').textContent = data.finalMessage;
-
-  $('redirectCountdown').classList.toggle('hidden', !!options.preview);
-  if(!options.preview){
-    startRedirectCountdown(total,priorityName,grade);
-  }
 }
 
 function runAnalysisSequence(){
@@ -768,7 +777,7 @@ async function finish(){
   }
 
   setTimeout(()=>{
-    showConclusion(total,priorityName,grade);
+    redirectToResultado(total,priorityName,grade);
   },CONFIG.analysisMs);
 }
 
@@ -792,13 +801,42 @@ function startPreview(key){
   const fakeTotal = key==='alta' ? 70 : key==='media' ? 45 : 20;
   $('quizView').classList.add('hidden');
   $('progressFill').style.width = '100%';
-  showConclusion(fakeTotal,priorityName,grade,{preview:true});
+  showConclusion(fakeTotal,priorityName,grade);
+}
+
+// Página de resultado real: /resultado-alta|media|baixa (páginas WordPress
+// próprias, separadas de /quizdiagnostico-02/ — ver PASSAGEM-DE-PLANTAO.md).
+// O quiz redireciona pra cá no fim de finish(), via redirectToResultado().
+function getResultKey(){
+  const path = location.pathname.toLowerCase();
+  if(path.includes('resultado-alta')) return 'alta';
+  if(path.includes('resultado-media')) return 'media';
+  if(path.includes('resultado-baixa')) return 'baixa';
+  return null;
+}
+
+function startResultado(key){
+  const priorityName = key==='alta' ? 'Alta' : key==='media' ? 'Média' : 'Baixa';
+  let stored = null;
+  try{ stored = JSON.parse(sessionStorage.getItem('quiz_result')); }catch(err){ stored = null; }
+
+  const total = stored?.total ?? Number(params.get('quiz_score')) ?? 0;
+  const grade = stored?.grade ?? params.get('quiz_classificacao') ?? destination(priorityName);
+  if(stored?.answers) Object.assign(answers,stored.answers);
+
+  $('quizView').classList.add('hidden');
+  $('progressFill').style.width = '100%';
+  showConclusion(total,priorityName,grade);
 }
 
 const previewKey = getPreviewKey();
+const resultKey = getResultKey();
 if(previewKey){
   startPreview(previewKey);
+}else if(resultKey){
+  startResultado(resultKey);
 }else{
+  submitHubSpotStart().catch(err=>console.error('HubSpot (início do quiz):',err));
   render();
 }
 
