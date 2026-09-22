@@ -1,8 +1,8 @@
 const CONFIG = {
   thresholds: { high: 60, medium: 35 },
   redirects: {
-    grade1: 'https://lp.gioppoeconti.com.br/obrigado-grau-1/',
-    grade2: 'https://lp.gioppoeconti.com.br/obrigado-grau-2/',
+    grade1: 'https://lp.gioppoeconti.com.br/diagnostico-obrigado-a/',
+    grade2: 'https://lp.gioppoeconti.com.br/diagnostico-obrigado-b/',
     resultado: {
       alta: 'https://lp.gioppoeconti.com.br/resultado-alta/',
       media: 'https://lp.gioppoeconti.com.br/resultado-media/',

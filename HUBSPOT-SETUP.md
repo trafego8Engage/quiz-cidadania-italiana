@@ -70,8 +70,8 @@ prioridade:
   score < 35             → "Baixa"
 
 destino:
-  prioridade "Baixa"     → Grau 2  (obrigado-grau-2)
-  prioridade "Alta"/"Média" → Grau 1  (obrigado-grau-1)
+  prioridade "Baixa"     → Grau 2  (diagnostico-obrigado-b; até 2026-09-22 era obrigado-grau-2)
+  prioridade "Alta"/"Média" → Grau 1  (diagnostico-obrigado-a; até 2026-09-22 era obrigado-grau-1)
 ```
 
 Essas 3 telas de conclusão diferentes (Alta/Média/Baixa) existem só pra dar um tom de mensagem diferente — tecnicamente só há 2 destinos finais (Grau 1 e Grau 2).

@@ -212,6 +212,17 @@ pra fora do quiz.
   motivo em HUBSPOT-SETUP.md), pra não pegar quem ainda está no meio das
   perguntas.
 
+- **Decisão (2026-09-22)**: as páginas de obrigado do quiz passam a ser
+  `/diagnostico-obrigado-a/` (Grau 1 — Alta/Média) e `/diagnostico-obrigado-b/`
+  (Grau 2 — Baixa), no lugar de `/obrigado-grau-1/` e `/obrigado-grau-2/`.
+  **Porquê**: pedido do usuário (páginas novas criadas por ele no WordPress).
+  **Publicado em produção**: `CONFIG.redirects` do `app.js` alterado, bundle
+  regenerado e o conteúdo das 4 páginas que usam o mesmo bloco
+  (`/quizdiagnostico-02/` post 3373, `/resultado-alta|media|baixa/` posts
+  3414/3416/3418) atualizado via `wp.editPost` (XML-RPC). Confirmado ao vivo
+  nas 4. As páginas antigas `/obrigado-grau-1|2/` continuam publicadas, mas
+  nada no quiz aponta mais pra elas.
+
 ## Roadmap / fases
 
 **Feito:**

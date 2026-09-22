@@ -66,7 +66,8 @@ Anúncio
   · 3 telas de conclusão automáticas (Alta/Média/Baixa) com insights dinâmicos
   · redireciona sozinho após contagem regressiva de 15s, sem nenhum botão
   ↓
-/obrigado-grau-1/   ou   /obrigado-grau-2/    ← as mesmas páginas de sempre, sem alteração
+/diagnostico-obrigado-a/   ou   /diagnostico-obrigado-b/   ← trocadas em 2026-09-22
+                                                 (antes: /obrigado-grau-1/ e /obrigado-grau-2/)
                                                  (/obrigado-dq/ não será usada por enquanto)
 ```
 
@@ -76,7 +77,7 @@ Anúncio
 |---|---|---|
 | `/diagnostico-a/`, `/diagnostico-b/`, `/diagnostico-c/` | Só o link de destino | Hoje apontam pra `/quizdiagnostico/`; precisam passar a apontar pra `/quizdiagnostico-02/` (ou o slug final escolhido) quando a nova versão for publicada — é uma edição nessas 3 páginas Elementor, fora deste repositório |
 | O quiz em si | Página nova | `/quizdiagnostico-02/` (slug ainda não confirmado com o usuário) substitui `/quizdiagnostico/` — o antigo pode continuar publicado até a troca ser confirmada, sem risco, já que nada aponta pra ele automaticamente |
-| `/obrigado-grau-1/`, `/obrigado-grau-2/` | Nada | Continuam sendo os destinos finais, sem alteração nenhuma |
+| `/obrigado-grau-1/`, `/obrigado-grau-2/` | Saíram do fluxo (2026-09-22) | Substituídas por `/diagnostico-obrigado-a/` (Grau 1) e `/diagnostico-obrigado-b/` (Grau 2) em `CONFIG.redirects` |
 | `/obrigado-dq/` | Nada, por decisão | Existe em produção, mas **decidido não usar por enquanto** (2026-08-16) — ver [Armadilhas conhecidas](#armadilhas-conhecidas) |
 
 ## Estrutura de código
@@ -123,7 +124,7 @@ real, só uma ferramenta de revisão):
 - Em modo preview, `startPreview()` pula direto pra `showConclusion()` com
   valores de score fictícios, esconde a contagem regressiva de redirect
   (`#redirectCountdown`) e mantém o botão de CTA visível/funcional — se
-  clicado, redireciona de verdade pra `/obrigado-grau-1/` ou `/obrigado-grau-2/`
+  clicado, redireciona de verdade pra `/diagnostico-obrigado-a/` ou `/diagnostico-obrigado-b/`
   (comportamento igual ao de produção, útil pra revisar o botão também).
 - No ambiente Vercel (preview): `https://quiz-cidadania-italiana-rtwk.vercel.app/diagnostico-alta`,
   `/diagnostico-media`, `/diagnostico-baixa`.
@@ -394,6 +395,8 @@ comando manual.
 | Página de captura de lead A | https://lp.gioppoeconti.com.br/diagnostico-a/ (redireciona pro quiz02) | 2026-08-18 |
 | Página de captura de lead B | https://lp.gioppoeconti.com.br/diagnostico-b/ (redireciona pro quiz02) | 2026-08-18 |
 | Página de captura de lead C | https://lp.gioppoeconti.com.br/diagnostico-c/ (redireciona pro quiz02) | 2026-08-18 |
-| Obrigado — Grau 1 | https://lp.gioppoeconti.com.br/obrigado-grau-1/ | 2026-08-16 |
-| Obrigado — Grau 2 | https://lp.gioppoeconti.com.br/obrigado-grau-2/ | 2026-08-16 |
+| Obrigado A — Grau 1 (Alta/Média) | https://lp.gioppoeconti.com.br/diagnostico-obrigado-a/ | 2026-09-22 |
+| Obrigado B — Grau 2 (Baixa) | https://lp.gioppoeconti.com.br/diagnostico-obrigado-b/ | 2026-09-22 |
+| Obrigado — Grau 1 (antigo, fora do fluxo) | https://lp.gioppoeconti.com.br/obrigado-grau-1/ | 2026-08-16 |
+| Obrigado — Grau 2 (antigo, fora do fluxo) | https://lp.gioppoeconti.com.br/obrigado-grau-2/ | 2026-08-16 |
 | Obrigado — Desqualificado | https://lp.gioppoeconti.com.br/obrigado-dq/ | 2026-08-16 (existe, não usado pelo quiz) |
