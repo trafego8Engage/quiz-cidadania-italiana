@@ -151,7 +151,7 @@ isso o bundle:
 | Quiz (8 perguntas + lead score) | ✅ feito | thresholds em `CONFIG.thresholds` (Alta ≥60, Média ≥35, senão Baixa) |
 | 3 telas de conclusão (Alta/Média/Baixa) | ✅ feito | sessão de 2026-08, com insights dinâmicos por resposta (`dynamicInsights()`) |
 | Interstícios de argumentação entre perguntas | ✅ feito | 3 telas de `FEEDBACK` (`documentos`→pergunta 4, `familiares`→pergunta 8, `idade`→diagnóstico), `CONFIG.feedbackMs` = 4500ms (2026-08-17, aumentado de 1800ms — estava passando rápido demais pra ler) |
-| Redirecionamento automático + botão manual | ✅ feito | contagem regressiva de 15s (`CONFIG.redirectSeconds`) **e** botão `#conclusionCtaButton` que redireciona na hora — ver decisão revisada em [PASSAGEM-DE-PLANTAO.md](PASSAGEM-DE-PLANTAO.md) |
+| Redirecionamento só por botão manual | ✅ feito | contagem regressiva de 15s removida (2026-08-20) — só o botão `#conclusionCtaButton` redireciona; ver decisão revisada em [PASSAGEM-DE-PLANTAO.md](PASSAGEM-DE-PLANTAO.md) |
 | Preview das 3 conclusões pro time de copy | ✅ feito | provisório, ver seção acima — `?preview=` ou `/diagnostico-alta|media|baixa` |
 | Compatibilidade com a captura de lead do funil real | ✅ confirmado | `contactFields()` já lê `firstname`/`email`/`hs_whatsapp_phone_number`, exatamente os params que `/diagnostico-a/` e `/diagnostico-c/` mandam via JS após o form HubSpot |
 | Envio das respostas do quiz pro HubSpot | ✅ feito (2026-08-17) | `CONFIG.hubspot` preenchido (`portalId: '51117535'`, `formGuid: '44ad0787-1f00-4df5-9114-9a2624e36064'`). Formulário e 11 propriedades de contato criados via API — detalhe completo em [HUBSPOT-SETUP.md](HUBSPOT-SETUP.md) |
@@ -160,6 +160,8 @@ isso o bundle:
 | Publicação no domínio real da Gioppo & Conti | ✅ feito (2026-08-18) | página `/quizdiagnostico-02/` publicada (post ID 3373), com o rodapé do tema desativado via "Opções do Neve". Páginas `/diagnostico-a/` (post 3261), `/diagnostico-b/` (post 3262) e `/diagnostico-c/` (post 3263) já redirecionam pra ela em vez do quiz antigo |
 | Destino "Lead Desqualificado" (`/obrigado-dq/`) | 🚫 decidido não usar por enquanto | página existe em produção, mas `app.js` não redireciona pra ela — decisão explícita do usuário (2026-08-16), não é bug. Ver [Armadilhas conhecidas](#armadilhas-conhecidas) |
 | Senha de Aplicativo / acesso via API ao WordPress | ❌ bloqueado | bloqueio de hospedagem (Hostinger), não é algo resolvível via `wp-admin`; ver armadilha correspondente |
+| Captura de quem abandona o quiz (não vira contato de outro jeito) | ✅ feito (2026-08-20) | `submitHubSpotStart()` dispara no carregamento do quiz, antes da pergunta 1 — cria/atualiza o contato só com nome/e-mail/telefone. Lista dinâmica `Quiz Cidadania — Não terminou o quiz` (list ID `360`) no HubSpot. Detalhe completo em [HUBSPOT-SETUP.md](HUBSPOT-SETUP.md#9-captura-de-quem-abandona-o-quiz-2026-08-20) |
+| Publicação da página do quiz sem navegador | ✅ descoberto (2026-08-20) | `xmlrpc.php` está habilitado no WordPress e o conteúdo da página `/quizdiagnostico-02/` é um bloco `wp:html` puro do Gutenberg (não Elementor) — dá pra atualizar `post_content` via `wp.editPost` (XML-RPC), sem precisar de Playwright/navegador. Só vale pra essa página; as páginas de captura A/B/C continuam sendo Elementor, exigem a técnica de automação de navegador documentada nas armadilhas abaixo |
 
 ## Armadilhas conhecidas
 

@@ -1,0 +1,206 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+#gc-privacy-page{
+  --color-bg:#080909;
+  --color-surface:#111212;
+  --color-border:#292929;
+  --color-primary:#B5122A;
+  --color-primary-dark:#68141E;
+  --color-text:#F4F1ED;
+  --color-text-secondary:#B9B9B9;
+  --color-text-muted:#747474;
+  --radius-sm:10px;
+  --radius-md:16px;
+  --container:760px;
+
+  background:var(--color-bg);
+  color:var(--color-text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  padding:56px 18px 72px;
+  box-sizing:border-box;
+}
+#gc-privacy-page *{box-sizing:border-box}
+#gc-privacy-page .gc-wrap{max-width:var(--container);margin:0 auto}
+
+#gc-privacy-page .gc-header{text-align:center;margin-bottom:36px}
+#gc-privacy-page .brand-logo{height:26px;width:auto;display:block;margin:0 auto 26px}
+#gc-privacy-page .eyebrow{display:inline-flex;align-items:center;margin:0 auto 16px;padding:6px 14px;border:1px solid rgba(181,18,42,.35);border-radius:999px;background:#150c0d;color:var(--color-primary);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+#gc-privacy-page h1{margin:0 0 12px;font-family:"Playfair Display",Georgia,serif;font-weight:500;letter-spacing:-.01em;color:var(--color-text);font-size:clamp(26px,4vw,36px)}
+#gc-privacy-page .gc-sub{color:var(--color-text-secondary);line-height:1.6;margin:0 auto;max-width:560px;font-size:15px}
+#gc-privacy-page .gc-meta{margin-top:22px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;color:var(--color-text-muted);font-size:.78rem}
+#gc-privacy-page .gc-meta strong{color:var(--color-text-secondary);font-weight:600}
+
+#gc-privacy-page .gc-index{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:22px 26px;margin:0 0 40px}
+#gc-privacy-page .gc-index-title{margin:0 0 14px;text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;font-weight:700;color:var(--color-text-muted)}
+#gc-privacy-page .gc-index ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:9px 24px}
+#gc-privacy-page .gc-index a{display:flex;gap:10px;text-decoration:none;color:var(--color-text-secondary);font-size:.92rem}
+#gc-privacy-page .gc-index a:hover{color:var(--color-text)}
+#gc-privacy-page .gc-index a span{color:var(--color-primary);flex:none;font-weight:600}
+
+#gc-privacy-page section.gc-section{padding:26px 0;border-top:1px solid var(--color-border)}
+#gc-privacy-page section.gc-section:first-of-type{border-top:none}
+#gc-privacy-page h2{margin:0 0 14px;font-family:"Playfair Display",Georgia,serif;font-weight:500;color:var(--color-text);font-size:clamp(20px,2.6vw,24px);scroll-margin-top:20px}
+#gc-privacy-page p{color:var(--color-text-secondary);line-height:1.65;margin:0 0 14px;font-size:15px}
+#gc-privacy-page p:last-child{margin-bottom:0}
+#gc-privacy-page ul{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:10px}
+#gc-privacy-page ul:last-child{margin-bottom:0}
+#gc-privacy-page li{display:flex;align-items:flex-start;gap:10px;color:var(--color-text-secondary);font-size:15px;line-height:1.55}
+#gc-privacy-page li::before{content:"";flex:none;width:6px;height:6px;margin-top:8px;border-radius:50%;background:var(--color-primary)}
+#gc-privacy-page strong{color:var(--color-text);font-weight:600}
+
+#gc-privacy-page .gc-callout{background:var(--color-surface);border:1px solid var(--color-border);border-left:3px solid var(--color-primary);border-radius:var(--radius-sm);padding:18px 20px;margin-top:16px}
+#gc-privacy-page .gc-callout .gc-label{display:block;margin:0 0 6px;text-transform:uppercase;letter-spacing:.1em;font-size:.7rem;font-weight:700;color:var(--color-primary)}
+#gc-privacy-page .gc-callout p{margin:0;color:var(--color-text)}
+
+#gc-privacy-page .gc-footer{margin-top:44px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:26px 30px}
+#gc-privacy-page .gc-footer h3{margin:0 0 12px;font-family:"Playfair Display",Georgia,serif;font-weight:500;color:var(--color-text);font-size:19px}
+#gc-privacy-page .gc-footer p{color:var(--color-text-secondary);line-height:1.8;margin:0;font-size:14.5px}
+#gc-privacy-page .gc-footer strong{color:var(--color-text)}
+
+@media (max-width:640px){
+  #gc-privacy-page .gc-index ol{grid-template-columns:1fr}
+}
+</style>
+
+<div id="gc-privacy-page">
+<div class="gc-wrap">
+
+  <header class="gc-header">
+    <img class="brand-logo" src="data:image/png;base64,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" alt="Gioppo & Conti">
+    <span class="eyebrow">LGPD · Lei nº 13.709/2018</span>
+    <h1>Política de Privacidade</h1>
+    <p class="gc-sub">Aplicável a visitantes do site, clientes e interessados no processo de cidadania italiana, e candidatos a vagas de emprego na Gioppo &amp; Conti.</p>
+    <div class="gc-meta">
+      <span><strong>Domínio:</strong> www.gioppoeconti.com.br</span>
+      <span><strong>Atualizado em:</strong> setembro/2026</span>
+    </div>
+  </header>
+
+  <nav class="gc-index">
+    <p class="gc-index-title">Índice</p>
+    <ol>
+      <li><a href="#s1"><span>01</span> A quem se aplica</a></li>
+      <li><a href="#s2"><span>02</span> Informações que coletamos</a></li>
+      <li><a href="#s3"><span>03</span> Como usamos suas informações</a></li>
+      <li><a href="#s4"><span>04</span> Base legal (LGPD)</a></li>
+      <li><a href="#s5"><span>05</span> Compartilhamento</a></li>
+      <li><a href="#s6"><span>06</span> Retenção de dados</a></li>
+      <li><a href="#s7"><span>07</span> Segurança das informações</a></li>
+      <li><a href="#s8"><span>08</span> Seus direitos</a></li>
+      <li><a href="#s9"><span>09</span> Cookies</a></li>
+      <li><a href="#s10"><span>10</span> Alterações nesta política</a></li>
+      <li><a href="#s11"><span>11</span> Contato</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section class="gc-section" id="s1">
+      <h2>1. A quem esta política se aplica</h2>
+      <p>Esta política vale para qualquer pessoa que interaja com a Gioppo &amp; Conti, incluindo:</p>
+      <ul>
+        <li>Visitantes do nosso site;</li>
+        <li>Pessoas interessadas ou clientes do serviço de assessoria em cidadania italiana;</li>
+        <li>Candidatos a vagas de emprego oferecidas pela Gioppo &amp; Conti.</li>
+      </ul>
+    </section>
+
+    <section class="gc-section" id="s2">
+      <h2>2. Informações que coletamos</h2>
+      <p>Podemos coletar e processar os seguintes dados pessoais, dependendo da sua relação conosco:</p>
+      <ul>
+        <li><strong>Informações que você nos fornece diretamente:</strong> nome, e-mail, telefone, endereço e outros dados fornecidos por meio de formulários de contato, quiz de diagnóstico ou durante o processo de contratação dos nossos serviços;</li>
+        <li><strong>Informações para o processo de cidadania italiana:</strong> dados sobre ascendência, documentos e informações necessárias para avaliação e condução do seu processo;</li>
+        <li><strong>Informações de candidatos a vagas de emprego:</strong> currículo, carta de apresentação, formação acadêmica, experiência profissional, pretensão salarial, portfólio, perfis profissionais (como LinkedIn) e demais dados enviados voluntariamente em processos seletivos;</li>
+        <li><strong>Informações coletadas automaticamente:</strong> endereço IP, tipo de navegador, idioma, horário de acesso e páginas visitadas.</li>
+      </ul>
+    </section>
+
+    <section class="gc-section" id="s3">
+      <h2>3. Como usamos suas informações</h2>
+      <ul>
+        <li>Prestar e gerenciar nossos serviços de assessoria em cidadania italiana;</li>
+        <li>Avaliar e conduzir processos seletivos para vagas de emprego, incluindo análise de currículo, contato com candidatos e formalização de contratação;</li>
+        <li>Melhorar a experiência do usuário em nosso site;</li>
+        <li>Enviar comunicações relacionadas aos nossos serviços e processos seletivos, incluindo respostas às suas solicitações;</li>
+        <li>Cumprir com obrigações legais, regulatórias e trabalhistas.</li>
+      </ul>
+    </section>
+
+    <section class="gc-section" id="s4">
+      <h2>4. Base legal para o tratamento de dados</h2>
+      <p>Tratamos seus dados pessoais com base em uma ou mais das hipóteses previstas na Lei Geral de Proteção de Dados (Lei nº 13.709/2018):</p>
+      <ul>
+        <li>Execução de contrato ou de procedimentos preliminares a ele, como a contratação dos nossos serviços ou a condução de um processo seletivo;</li>
+        <li>Consentimento, quando você preenche formulários, quiz ou envia seu currículo espontaneamente;</li>
+        <li>Cumprimento de obrigação legal ou regulatória;</li>
+        <li>Legítimo interesse da Gioppo &amp; Conti, sempre respeitando seus direitos e liberdades fundamentais.</li>
+      </ul>
+    </section>
+
+    <section class="gc-section" id="s5">
+      <h2>5. Compartilhamento de informações</h2>
+      <p>Não vendemos, alugamos ou compartilhamos suas informações pessoais com terceiros para fins comerciais. Podemos compartilhar suas informações com:</p>
+      <ul>
+        <li>Prestadores de serviço que nos auxiliam na operação do site, no atendimento e na prestação de serviços (como ferramentas de CRM e gestão de relacionamento);</li>
+        <li>Autoridades legais, quando exigido por lei ou para proteger nossos direitos legais.</li>
+      </ul>
+    </section>
+
+    <section class="gc-section" id="s6">
+      <h2>6. Retenção de dados</h2>
+      <p>Mantemos seus dados pessoais apenas pelo tempo necessário para cumprir as finalidades descritas nesta política. No caso de candidaturas a vagas de emprego, os dados de candidatos não selecionados podem ser mantidos em nosso banco de talentos por um período razoável, para eventuais oportunidades futuras, podendo ser excluídos a qualquer momento mediante solicitação.</p>
+    </section>
+
+    <section class="gc-section" id="s7">
+      <h2>7. Segurança das informações</h2>
+      <p>Adotamos medidas técnicas e organizacionais adequadas para proteger suas informações pessoais contra acesso não autorizado, perda, destruição ou alteração.</p>
+    </section>
+
+    <section class="gc-section" id="s8">
+      <h2>8. Seus direitos</h2>
+      <p>De acordo com a LGPD, você tem o direito de:</p>
+      <ul>
+        <li>Acessar os dados pessoais que mantemos sobre você;</li>
+        <li>Solicitar a correção ou remoção de seus dados pessoais;</li>
+        <li>Limitar ou se opor ao processamento de seus dados pessoais;</li>
+        <li>Solicitar a portabilidade de seus dados pessoais;</li>
+        <li>Revogar seu consentimento a qualquer momento.</li>
+      </ul>
+      <div class="gc-callout">
+        <span class="gc-label">Como exercer</span>
+        <p>Entre em contato pelo e-mail <strong>contato@gioppoeconti.com.br</strong> — respondemos diretamente às solicitações de acesso, correção, exclusão ou portabilidade de dados.</p>
+      </div>
+    </section>
+
+    <section class="gc-section" id="s9">
+      <h2>9. Cookies</h2>
+      <p>Nosso site utiliza cookies para melhorar sua experiência de navegação. Você pode gerenciar suas preferências de cookies através das configurações do seu navegador.</p>
+    </section>
+
+    <section class="gc-section" id="s10">
+      <h2>10. Alterações nesta Política de Privacidade</h2>
+      <p>Podemos atualizar esta Política de Privacidade periodicamente. Recomendamos que você revise esta página regularmente para se manter informado sobre como estamos protegendo suas informações.</p>
+    </section>
+
+    <section class="gc-section" id="s11">
+      <h2>11. Contato</h2>
+      <p>Se você tiver dúvidas sobre esta Política de Privacidade ou sobre como tratamos suas informações — como visitante do site, cliente do serviço de cidadania ou candidato a uma vaga —, fale conosco.</p>
+    </section>
+
+  </main>
+
+  <footer class="gc-footer">
+    <h3>Gioppo &amp; Conti</h3>
+    <p>
+      <strong>E-mail</strong> — contato@gioppoeconti.com.br<br>
+      <strong>Telefone</strong> — +55 (11) 93312-8021<br>
+      <strong>Endereço</strong> — Av. Conselheiro Nébias, 444 – 1705, Boqueirão, Santos – SP, 11045-000
+    </p>
+  </footer>
+
+</div>
+</div>

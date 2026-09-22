@@ -1,0 +1,206 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+#gc-privacy-page{
+  --color-bg:#080909;
+  --color-surface:#111212;
+  --color-border:#292929;
+  --color-primary:#B5122A;
+  --color-primary-dark:#68141E;
+  --color-text:#F4F1ED;
+  --color-text-secondary:#B9B9B9;
+  --color-text-muted:#747474;
+  --radius-sm:10px;
+  --radius-md:16px;
+  --container:760px;
+
+  background:var(--color-bg);
+  color:var(--color-text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  padding:56px 18px 72px;
+  box-sizing:border-box;
+}
+#gc-privacy-page *{box-sizing:border-box}
+#gc-privacy-page .gc-wrap{max-width:var(--container);margin:0 auto}
+
+#gc-privacy-page .gc-header{text-align:center;margin-bottom:36px}
+#gc-privacy-page .brand-logo{height:26px;width:auto;display:block;margin:0 auto 26px}
+#gc-privacy-page .eyebrow{display:inline-flex;align-items:center;margin:0 auto 16px;padding:6px 14px;border:1px solid rgba(181,18,42,.35);border-radius:999px;background:#150c0d;color:var(--color-primary);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+#gc-privacy-page h1{margin:0 0 12px;font-family:"Playfair Display",Georgia,serif;font-weight:500;letter-spacing:-.01em;color:var(--color-text);font-size:clamp(26px,4vw,36px)}
+#gc-privacy-page .gc-sub{color:var(--color-text-secondary);line-height:1.6;margin:0 auto;max-width:560px;font-size:15px}
+#gc-privacy-page .gc-meta{margin-top:22px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;color:var(--color-text-muted);font-size:.78rem}
+#gc-privacy-page .gc-meta strong{color:var(--color-text-secondary);font-weight:600}
+
+#gc-privacy-page .gc-index{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:22px 26px;margin:0 0 40px}
+#gc-privacy-page .gc-index-title{margin:0 0 14px;text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;font-weight:700;color:var(--color-text-muted)}
+#gc-privacy-page .gc-index ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:9px 24px}
+#gc-privacy-page .gc-index a{display:flex;gap:10px;text-decoration:none;color:var(--color-text-secondary);font-size:.92rem}
+#gc-privacy-page .gc-index a:hover{color:var(--color-text)}
+#gc-privacy-page .gc-index a span{color:var(--color-primary);flex:none;font-weight:600}
+
+#gc-privacy-page section.gc-section{padding:26px 0;border-top:1px solid var(--color-border)}
+#gc-privacy-page section.gc-section:first-of-type{border-top:none}
+#gc-privacy-page h2{margin:0 0 14px;font-family:"Playfair Display",Georgia,serif;font-weight:500;color:var(--color-text);font-size:clamp(20px,2.6vw,24px);scroll-margin-top:20px}
+#gc-privacy-page p{color:var(--color-text-secondary);line-height:1.65;margin:0 0 14px;font-size:15px}
+#gc-privacy-page p:last-child{margin-bottom:0}
+#gc-privacy-page ul{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:10px}
+#gc-privacy-page ul:last-child{margin-bottom:0}
+#gc-privacy-page li{display:flex;align-items:flex-start;gap:10px;color:var(--color-text-secondary);font-size:15px;line-height:1.55}
+#gc-privacy-page li::before{content:"";flex:none;width:6px;height:6px;margin-top:8px;border-radius:50%;background:var(--color-primary)}
+#gc-privacy-page strong{color:var(--color-text);font-weight:600}
+
+#gc-privacy-page .gc-callout{background:var(--color-surface);border:1px solid var(--color-border);border-left:3px solid var(--color-primary);border-radius:var(--radius-sm);padding:18px 20px;margin-top:16px}
+#gc-privacy-page .gc-callout .gc-label{display:block;margin:0 0 6px;text-transform:uppercase;letter-spacing:.1em;font-size:.7rem;font-weight:700;color:var(--color-primary)}
+#gc-privacy-page .gc-callout p{margin:0;color:var(--color-text)}
+
+#gc-privacy-page .gc-footer{margin-top:44px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:26px 30px}
+#gc-privacy-page .gc-footer h3{margin:0 0 12px;font-family:"Playfair Display",Georgia,serif;font-weight:500;color:var(--color-text);font-size:19px}
+#gc-privacy-page .gc-footer p{color:var(--color-text-secondary);line-height:1.8;margin:0;font-size:14.5px}
+#gc-privacy-page .gc-footer strong{color:var(--color-text)}
+
+@media (max-width:640px){
+  #gc-privacy-page .gc-index ol{grid-template-columns:1fr}
+}
+</style>
+
+<div id="gc-privacy-page">
+<div class="gc-wrap">
+
+  <header class="gc-header">
+    <img class="brand-logo" src="__LOGO_DATA_URI__" alt="Gioppo & Conti">
+    <span class="eyebrow">LGPD · Lei nº 13.709/2018</span>
+    <h1>Política de Privacidade</h1>
+    <p class="gc-sub">Aplicável a visitantes do site, clientes e interessados no processo de cidadania italiana, e candidatos a vagas de emprego na Gioppo &amp; Conti.</p>
+    <div class="gc-meta">
+      <span><strong>Domínio:</strong> www.gioppoeconti.com.br</span>
+      <span><strong>Atualizado em:</strong> setembro/2026</span>
+    </div>
+  </header>
+
+  <nav class="gc-index">
+    <p class="gc-index-title">Índice</p>
+    <ol>
+      <li><a href="#s1"><span>01</span> A quem se aplica</a></li>
+      <li><a href="#s2"><span>02</span> Informações que coletamos</a></li>
+      <li><a href="#s3"><span>03</span> Como usamos suas informações</a></li>
+      <li><a href="#s4"><span>04</span> Base legal (LGPD)</a></li>
+      <li><a href="#s5"><span>05</span> Compartilhamento</a></li>
+      <li><a href="#s6"><span>06</span> Retenção de dados</a></li>
+      <li><a href="#s7"><span>07</span> Segurança das informações</a></li>
+      <li><a href="#s8"><span>08</span> Seus direitos</a></li>
+      <li><a href="#s9"><span>09</span> Cookies</a></li>
+      <li><a href="#s10"><span>10</span> Alterações nesta política</a></li>
+      <li><a href="#s11"><span>11</span> Contato</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section class="gc-section" id="s1">
+      <h2>1. A quem esta política se aplica</h2>
+      <p>Esta política vale para qualquer pessoa que interaja com a Gioppo &amp; Conti, incluindo:</p>
+      <ul>
+        <li>Visitantes do nosso site;</li>
+        <li>Pessoas interessadas ou clientes do serviço de assessoria em cidadania italiana;</li>
+        <li>Candidatos a vagas de emprego oferecidas pela Gioppo &amp; Conti.</li>
+      </ul>
+    </section>
+
+    <section class="gc-section" id="s2">
+      <h2>2. Informações que coletamos</h2>
+      <p>Podemos coletar e processar os seguintes dados pessoais, dependendo da sua relação conosco:</p>
+      <ul>
+        <li><strong>Informações que você nos fornece diretamente:</strong> nome, e-mail, telefone, endereço e outros dados fornecidos por meio de formulários de contato, quiz de diagnóstico ou durante o processo de contratação dos nossos serviços;</li>
+        <li><strong>Informações para o processo de cidadania italiana:</strong> dados sobre ascendência, documentos e informações necessárias para avaliação e condução do seu processo;</li>
+        <li><strong>Informações de candidatos a vagas de emprego:</strong> currículo, carta de apresentação, formação acadêmica, experiência profissional, pretensão salarial, portfólio, perfis profissionais (como LinkedIn) e demais dados enviados voluntariamente em processos seletivos;</li>
+        <li><strong>Informações coletadas automaticamente:</strong> endereço IP, tipo de navegador, idioma, horário de acesso e páginas visitadas.</li>
+      </ul>
+    </section>
+
+    <section class="gc-section" id="s3">
+      <h2>3. Como usamos suas informações</h2>
+      <ul>
+        <li>Prestar e gerenciar nossos serviços de assessoria em cidadania italiana;</li>
+        <li>Avaliar e conduzir processos seletivos para vagas de emprego, incluindo análise de currículo, contato com candidatos e formalização de contratação;</li>
+        <li>Melhorar a experiência do usuário em nosso site;</li>
+        <li>Enviar comunicações relacionadas aos nossos serviços e processos seletivos, incluindo respostas às suas solicitações;</li>
+        <li>Cumprir com obrigações legais, regulatórias e trabalhistas.</li>
+      </ul>
+    </section>
+
+    <section class="gc-section" id="s4">
+      <h2>4. Base legal para o tratamento de dados</h2>
+      <p>Tratamos seus dados pessoais com base em uma ou mais das hipóteses previstas na Lei Geral de Proteção de Dados (Lei nº 13.709/2018):</p>
+      <ul>
+        <li>Execução de contrato ou de procedimentos preliminares a ele, como a contratação dos nossos serviços ou a condução de um processo seletivo;</li>
+        <li>Consentimento, quando você preenche formulários, quiz ou envia seu currículo espontaneamente;</li>
+        <li>Cumprimento de obrigação legal ou regulatória;</li>
+        <li>Legítimo interesse da Gioppo &amp; Conti, sempre respeitando seus direitos e liberdades fundamentais.</li>
+      </ul>
+    </section>
+
+    <section class="gc-section" id="s5">
+      <h2>5. Compartilhamento de informações</h2>
+      <p>Não vendemos, alugamos ou compartilhamos suas informações pessoais com terceiros para fins comerciais. Podemos compartilhar suas informações com:</p>
+      <ul>
+        <li>Prestadores de serviço que nos auxiliam na operação do site, no atendimento e na prestação de serviços (como ferramentas de CRM e gestão de relacionamento);</li>
+        <li>Autoridades legais, quando exigido por lei ou para proteger nossos direitos legais.</li>
+      </ul>
+    </section>
+
+    <section class="gc-section" id="s6">
+      <h2>6. Retenção de dados</h2>
+      <p>Mantemos seus dados pessoais apenas pelo tempo necessário para cumprir as finalidades descritas nesta política. No caso de candidaturas a vagas de emprego, os dados de candidatos não selecionados podem ser mantidos em nosso banco de talentos por um período razoável, para eventuais oportunidades futuras, podendo ser excluídos a qualquer momento mediante solicitação.</p>
+    </section>
+
+    <section class="gc-section" id="s7">
+      <h2>7. Segurança das informações</h2>
+      <p>Adotamos medidas técnicas e organizacionais adequadas para proteger suas informações pessoais contra acesso não autorizado, perda, destruição ou alteração.</p>
+    </section>
+
+    <section class="gc-section" id="s8">
+      <h2>8. Seus direitos</h2>
+      <p>De acordo com a LGPD, você tem o direito de:</p>
+      <ul>
+        <li>Acessar os dados pessoais que mantemos sobre você;</li>
+        <li>Solicitar a correção ou remoção de seus dados pessoais;</li>
+        <li>Limitar ou se opor ao processamento de seus dados pessoais;</li>
+        <li>Solicitar a portabilidade de seus dados pessoais;</li>
+        <li>Revogar seu consentimento a qualquer momento.</li>
+      </ul>
+      <div class="gc-callout">
+        <span class="gc-label">Como exercer</span>
+        <p>Entre em contato pelo e-mail <strong>contato@gioppoeconti.com.br</strong> — respondemos diretamente às solicitações de acesso, correção, exclusão ou portabilidade de dados.</p>
+      </div>
+    </section>
+
+    <section class="gc-section" id="s9">
+      <h2>9. Cookies</h2>
+      <p>Nosso site utiliza cookies para melhorar sua experiência de navegação. Você pode gerenciar suas preferências de cookies através das configurações do seu navegador.</p>
+    </section>
+
+    <section class="gc-section" id="s10">
+      <h2>10. Alterações nesta Política de Privacidade</h2>
+      <p>Podemos atualizar esta Política de Privacidade periodicamente. Recomendamos que você revise esta página regularmente para se manter informado sobre como estamos protegendo suas informações.</p>
+    </section>
+
+    <section class="gc-section" id="s11">
+      <h2>11. Contato</h2>
+      <p>Se você tiver dúvidas sobre esta Política de Privacidade ou sobre como tratamos suas informações — como visitante do site, cliente do serviço de cidadania ou candidato a uma vaga —, fale conosco.</p>
+    </section>
+
+  </main>
+
+  <footer class="gc-footer">
+    <h3>Gioppo &amp; Conti</h3>
+    <p>
+      <strong>E-mail</strong> — contato@gioppoeconti.com.br<br>
+      <strong>Telefone</strong> — +55 (11) 93312-8021<br>
+      <strong>Endereço</strong> — Av. Conselheiro Nébias, 444 – 1705, Boqueirão, Santos – SP, 11045-000
+    </p>
+  </footer>
+
+</div>
+</div>

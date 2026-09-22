@@ -120,3 +120,17 @@ O Private App Access Token usado pra criar tudo acima foi apagado do disco (não
 Ainda não foi feita uma submissão real de teste — isso criaria um contato de verdade no HubSpot de produção, então não fiz sem confirmar antes. Pra validar que tudo está batendo certo (nomes de propriedade, tipos, etc.), duas opções:
 - **Rodar o quiz de verdade** (local ou no preview da Vercel) até o fim e conferir se o contato aparece no HubSpot com todas as respostas certas.
 - **Eu faço uma submissão de teste** com um e-mail claramente identificável (ex. `teste-quiz-claude@exemplo.com`) — nesse caso, você precisaria apagar esse contato de teste depois no HubSpot.
+
+## 9. Captura de quem abandona o quiz (2026-08-20)
+
+**Problema que isso resolve**: antes desta mudança, um contato só era criado/atualizado no HubSpot quando a pessoa terminava as 8 perguntas (`submitHubSpot()`, chamada só uma vez, no fim). Quem preenchia a página de captura (A/B/C) e abandonava o quiz no meio não deixava nenhum rastro no HubSpot — não dava pra nutrir esse lead porque ele nem existia como contato.
+
+**O que foi mudado em `app.js`**: nova função `submitHubSpotStart()`, chamada assim que a página do quiz carrega (antes da pergunta 1), com os dados que já vêm da página de captura via URL (`firstname`/`lastname`/`email`/`phone`). Ela reaproveita o **mesmo formulário e Form GUID** do envio final (`44ad0787-1f00-4df5-9114-9a2624e36064`), só que enviando bem menos campos — nenhuma propriedade do quiz (`quiz_score`, `quiz_prioridade`, `quiz_classificacao`, nem as 8 perguntas) é preenchida nesse envio inicial. Só dispara se houver e-mail na URL; em modo preview (`?preview=`) não dispara.
+
+Se a pessoa completa o quiz depois, o envio final de sempre (`submitHubSpot()`) atualiza esse mesmo contato (mesmo e-mail) com as propriedades do quiz. Se ela abandona, o contato fica existindo, mas com `quiz_prioridade` em branco pra sempre — é esse o sinal usado pra identificar "abandonou".
+
+**Lista criada no HubSpot** (`Quiz Cidadania — Não terminou o quiz`, list ID `360`, ativa/dinâmica — atualiza sozinha): contato preencheu o formulário do quiz (`FORM_SUBMISSION` → `FILLED_OUT`, form `44ad0787-1f00-4df5-9114-9a2624e36064`) **E** `quiz_prioridade` está desconhecida (`IS_UNKNOWN`).
+
+⚠️ **Cuidado pra quem for editar esse filtro**: usar só "`quiz_prioridade` desconhecida" sem o filtro de formulário pega **qualquer contato do CRM inteiro** que nunca passou pelo quiz (chegamos a criar por engano uma versão assim, com 10.637 contatos — apagada antes de qualquer automação usar). O filtro de formulário é o que restringe corretamente só a quem realmente entrou nesse quiz.
+
+**Refinamento recomendado, mas não aplicado ainda**: adicionar um filtro de "criado há mais de X horas" (ex. 2h) pra não pegar alguém que ainda está no meio das perguntas, só demorando pra responder. Não consegui montar esse filtro de data pela API dentro do tempo da sessão (a API de Lists do HubSpot tem uma sintaxe de intervalo de tempo pouco documentada — mesmo tipo de atrito já registrado antes com `listFilterBranch`, ver [ARCHITECTURE.md](ARCHITECTURE.md#armadilhas-conhecidas)). **Pela interface do HubSpot é simples**: abrir a lista 360 → editar filtro → adicionar condição "Data de criação do contato" → "está a mais de" → 2 horas atrás (ou o período que fizer sentido).

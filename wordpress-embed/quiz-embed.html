@@ -275,7 +275,7 @@ const CONCLUSIONS = {
     tensionText:'Mesmo em casos aparentemente favoráveis, detalhes como linha de descendência, datas, documentos, registros e estratégia do processo podem alterar o caminho necessário. Por isso, antes de iniciar ou investir no processo, vale confirmar tecnicamente essas informações.',
     ctaTitle:'Converse com um especialista da Gioppo & Conti',
     ctaText:'Nossa equipe vai analisar as informações iniciais do seu caso, esclarecer os próximos passos e indicar o caminho mais adequado.',
-    ctaButtonLabel:'Quero confirmar meu caso agora',
+    ctaButtonLabel:'Ver os próximos passos do meu caso',
     finalMessage:'Você já deu o primeiro passo. Agora é hora de transformar informações iniciais em uma análise concreta do seu caso.'
   },
   media:{
@@ -297,7 +297,7 @@ const CONCLUSIONS = {
     },
     ctaTitle:'Descubra o que ainda falta no seu caso',
     ctaText:'Nossa equipe vai te ajudar a entender quais pontos precisam ser esclarecidos e quais podem ser os próximos passos.',
-    ctaButtonLabel:'Quero esclarecer meu caso agora',
+    ctaButtonLabel:'Ver o que falta esclarecer no meu caso',
     finalMessage:'Seu diagnóstico não terminou em um "sim" ou "não". Ele mostrou onde precisamos olhar com mais atenção.'
   },
   baixa:{
@@ -314,7 +314,7 @@ const CONCLUSIONS = {
     tensionText:'Talvez seja necessário investigar a origem familiar, localizar informações, compreender os requisitos ou se preparar melhor antes de iniciar qualquer processo. O importante é não tomar uma decisão baseada apenas em suposições.',
     ctaTitle:'Quer entender melhor por onde começar?',
     ctaText:'Preparamos informações para ajudar você a compreender os primeiros passos e identificar o que precisa descobrir antes de avançar.',
-    ctaButtonLabel:'Quero entender meus próximos passos',
+    ctaButtonLabel:'Ver por onde posso começar',
     finalMessage:'Nem todo processo começa com documentos prontos ou todas as respostas. Às vezes, o primeiro passo é descobrir quais perguntas precisam ser respondidas.'
   }
 };
@@ -734,7 +734,7 @@ function showConclusion(total,priorityName,grade){
   $('ctaTitle').textContent = data.ctaTitle;
   $('ctaText').textContent = data.ctaText;
   $('conclusionCtaButton').textContent = data.ctaButtonLabel;
-  $('conclusionCtaButtonTop').textContent = data.ctaButtonLabel;
+  $('conclusionCtaButtonTop').textContent = 'Ver meu resultado completo';
 
   $('conclusionFinal').textContent = data.finalMessage;
 }

@@ -1,0 +1,231 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+#gc-institucional-page{
+  --burgundy:#A31621;
+  --burgundy-line:#C93243;
+  --ink:#1a1a1a;
+  --ink-soft:#5c5b59;
+  --ink-muted:#8a8886;
+  --border:#e3e5e9;
+
+  background:#ffffff;
+  color:var(--ink);
+  font-family:Lato,Arial,system-ui,sans-serif;
+  padding:0 0 70px;
+  box-sizing:border-box;
+}
+#gc-institucional-page *{box-sizing:border-box}
+#gc-institucional-page a{pointer-events:none;text-decoration:none;color:inherit;cursor:default}
+#gc-institucional-page .gc-wrap{max-width:980px;margin:0 auto;padding:0 20px}
+
+/* topbar */
+#gc-institucional-page .gc-topbar{background:var(--burgundy);display:flex;justify-content:center;padding:18px 20px}
+#gc-institucional-page .gc-logo{height:26px;width:105px;background-image:url('__LOGO_URI__');background-repeat:no-repeat;background-position:center;background-size:contain}
+
+/* hero (foto de fundo dos sócios) */
+#gc-institucional-page .gc-hero{
+  position:relative;
+  background-color:#0d0d0d;
+  background-image:url('__HERO_BG_URI__');
+  background-position:center center;
+  background-size:cover;
+  padding:70px 20px 64px;
+}
+#gc-institucional-page .gc-hero-inner{max-width:980px;margin:0 auto}
+#gc-institucional-page .gc-header{text-align:left;max-width:520px}
+#gc-institucional-page .eyebrow{display:inline-flex;align-items:center;margin:0 0 16px;padding:5px 14px;border:1px solid rgba(255,255,255,.35);border-radius:999px;background:rgba(255,255,255,.08);color:#fff;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+#gc-institucional-page .gc-hero h1{margin:0 0 16px;font-weight:700;text-transform:uppercase;color:#fff;font-size:32px;line-height:1.2}
+#gc-institucional-page .gc-hero .gc-lead{color:#f1f1ef;line-height:1.5;margin:0;font-size:17px;font-weight:400}
+
+#gc-institucional-page .gc-checklist{display:flex;flex-direction:column;gap:12px;margin:28px 0 0}
+#gc-institucional-page .gc-check{display:flex;align-items:center;gap:9px;font-size:15px;color:#fff;font-weight:400}
+#gc-institucional-page .gc-check svg{flex:none;width:16px;height:16px;color:#fff}
+
+/* secao "Nosso diferencial" - fundo bordo */
+#gc-institucional-page .gc-diferencial{background:var(--burgundy);padding:56px 0}
+#gc-institucional-page .gc-split{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
+#gc-institucional-page .gc-split-photo{width:100%;aspect-ratio:1024/683;border-radius:6px;background-image:url('__FAMILIA_URI__');background-position:center;background-size:cover}
+#gc-institucional-page .gc-split h2{margin:0 0 16px;font-weight:700;text-transform:uppercase;color:#fff;font-size:30px;line-height:1.2}
+#gc-institucional-page .gc-split p{margin:0 0 14px;color:#fff;line-height:1.5;font-size:19px;font-weight:400}
+#gc-institucional-page .gc-split p:last-child{margin-bottom:0}
+#gc-institucional-page .gc-split p strong{font-weight:700}
+
+/* secao "por que fazemos o que fazemos" - foto de fundo */
+#gc-institucional-page .gc-why{
+  background-color:#000;
+  background-image:url('__WHY_BG_URI__');
+  background-position:center center;
+  background-size:cover;
+  padding:64px 20px;
+}
+#gc-institucional-page .gc-why-inner{max-width:640px;margin:0 auto}
+#gc-institucional-page .gc-why h2{margin:0 0 18px;color:#fff;font-size:28px;font-weight:400;line-height:1.15}
+#gc-institucional-page .gc-why p{color:#fff;font-size:17px;line-height:1.5;margin:0 0 14px;font-weight:400}
+#gc-institucional-page .gc-why p.gc-why-strong{font-size:19px;font-weight:700;margin-top:20px}
+
+/* secao "Nossos valores" - fundo branco */
+#gc-institucional-page .gc-values-section{padding:60px 0}
+#gc-institucional-page .gc-values-title{text-align:center;margin:0 0 32px;font-weight:700;text-transform:uppercase;color:var(--burgundy);font-size:28px;line-height:1.2}
+#gc-institucional-page .gc-values{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+#gc-institucional-page .gc-value{background:var(--burgundy);border-radius:6px;padding:26px 22px;text-align:left}
+#gc-institucional-page .gc-value-icon{width:40px;height:40px;margin-bottom:16px;background-repeat:no-repeat;background-position:center;background-size:contain}
+#gc-institucional-page .gc-value h3{margin:0 0 10px;color:#fff;font-size:19px;font-weight:600;line-height:1.3}
+#gc-institucional-page .gc-value .gc-divider{width:100%;height:1px;background:var(--burgundy-line);margin:0 0 12px}
+#gc-institucional-page .gc-value p{margin:0;color:#fff;font-size:14.5px;line-height:1.5;font-weight:400}
+
+/* secao "Nossos resultados em numeros" - foto de fundo */
+#gc-institucional-page .gc-stats{
+  text-align:center;
+  background-color:#000;
+  background-image:url('__STATS_BG_URI__');
+  background-position:center center;
+  background-size:cover;
+  padding:56px 24px;
+}
+#gc-institucional-page .gc-stats-title{margin:0 0 30px;color:#fff;font-size:26px;font-weight:700;text-transform:uppercase}
+#gc-institucional-page .gc-stats-row{display:flex;flex-wrap:wrap;justify-content:center;gap:18px 10px}
+#gc-institucional-page .gc-stat-badge{width:100px;height:91px;background-repeat:no-repeat;background-position:center;background-size:contain}
+#gc-institucional-page .gc-stats-caption{margin:26px 0 0;color:#fff;font-size:15px;font-weight:400}
+
+/* fechamento (candidatura) */
+#gc-institucional-page .gc-closing{text-align:center;padding:52px 20px 0}
+#gc-institucional-page .gc-closing p{color:var(--ink-soft);line-height:1.6;margin:0 auto;max-width:560px;font-size:16px}
+
+/* rodape */
+#gc-institucional-page .gc-footer{text-align:center;color:var(--ink-muted);font-size:12.5px;line-height:1.9;padding-top:40px}
+#gc-institucional-page .gc-footer strong{color:var(--ink-soft);font-weight:600}
+
+@media (max-width:760px){
+  #gc-institucional-page .gc-split{grid-template-columns:1fr;gap:24px}
+  #gc-institucional-page .gc-values{grid-template-columns:1fr 1fr}
+  #gc-institucional-page .gc-hero{background-position:right center;padding:44px 20px 240px}
+  #gc-institucional-page .gc-header{max-width:100%}
+}
+@media (max-width:480px){
+  #gc-institucional-page .gc-values{grid-template-columns:1fr}
+  #gc-institucional-page .gc-stat-badge{width:78px;height:71px}
+}
+</style>
+
+<div id="gc-institucional-page">
+
+  <div class="gc-topbar">
+    <div class="gc-logo" role="img" aria-label="Gioppo & Conti"></div>
+  </div>
+
+  <div class="gc-hero">
+    <div class="gc-hero-inner">
+      <header class="gc-header">
+        <span class="eyebrow">Institucional</span>
+        <h1>Quem somos</h1>
+        <p class="gc-lead">A Gioppo &amp; Conti é um escritório especializado no processo de reconhecimento de cidadania europeia, ajudando famílias a conquistar a cidadania italiana, portuguesa e espanhola de forma segura e sem burocracia.</p>
+      </header>
+
+      <div class="gc-checklist">
+        <div class="gc-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Especialistas em cidadania italiana, portuguesa e espanhola
+        </div>
+        <div class="gc-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Processo transparente e acompanhamento completo
+        </div>
+        <div class="gc-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Atendimento 100% personalizado
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gc-diferencial">
+    <div class="gc-wrap">
+      <div class="gc-split">
+        <div class="gc-split-photo" role="img" aria-label="Família com passaportes de cidadania italiana"></div>
+        <div>
+          <h2>Nosso diferencial</h2>
+          <p><strong>Em um cenário com tantos caminhos, escolhemos o mais sólido: o jurídico.</strong></p>
+          <p>Atuamos exclusivamente com processos seguros, com base em jurisprudência firme, e conduzidos por advogados de verdade.</p>
+          <p>Não trabalhamos com promessas fáceis, nem atalhos. Trabalhamos com seriedade, análise documental precisa, responsabilidade constitucional e respeito à ancestralidade.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gc-why">
+    <div class="gc-why-inner">
+      <h2>Por que fazemos o que fazemos</h2>
+      <p>Acreditamos que reconhecer a cidadania é um gesto de resgate.</p>
+      <p>Resgate de histórias que atravessaram oceanos, de sobrenomes que resistiram o tempo, de laços que nos lembram de onde viemos.</p>
+      <p class="gc-why-strong">E é por isso que, para nós, cada processo é único e cada família importa.</p>
+    </div>
+  </div>
+
+  <div class="gc-wrap">
+
+    <div class="gc-values-section">
+      <h2 class="gc-values-title">Nossos valores</h2>
+      <div class="gc-values">
+        <div class="gc-value">
+          <div class="gc-value-icon" style="background-image:url('__ICON_FPL_URI__')"></div>
+          <h3>Família em<br>primeiro lugar</h3>
+          <div class="gc-divider"></div>
+          <p>Cada processo que conduzimos tem rostos, histórias e gerações. Respeitamos isso.</p>
+        </div>
+        <div class="gc-value">
+          <div class="gc-value-icon" style="background-image:url('__ICON_JCP_URI__')"></div>
+          <h3>Justiça<br>como pilar</h3>
+          <div class="gc-divider"></div>
+          <p>Atuamos com base na legalidade e no respeito à constituição italiana, portuguesa e espanhola.</p>
+        </div>
+        <div class="gc-value">
+          <div class="gc-value-icon" style="background-image:url('__ICON_TC_URI__')"></div>
+          <h3>Transparência<br>e confiança</h3>
+          <div class="gc-divider"></div>
+          <p>Nossa comunicação é clara, objetiva e responsável.</p>
+        </div>
+        <div class="gc-value">
+          <div class="gc-value-icon" style="background-image:url('__ICON_EJ_URI__')"></div>
+          <h3>Excelência<br>jurídica</h3>
+          <div class="gc-divider"></div>
+          <p>Trabalhamos com um corpo jurídico experiente, comprometido com resultados seguros e sustentáveis.</p>
+        </div>
+        <div class="gc-value">
+          <div class="gc-value-icon" style="background-image:url('__ICON_PD_URI__')"></div>
+          <h3>Pertencimento<br>como direito</h3>
+          <div class="gc-divider"></div>
+          <p>A cidadania é mais do que um passaporte, é um elo com quem fomos e com quem queremos ser.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="gc-stats">
+    <h2 class="gc-stats-title">Nossos resultados em números</h2>
+    <div class="gc-stats-row">
+      <div class="gc-stat-badge" role="img" aria-label="1000 processos" style="background-image:url('__STAT_1000_URI__')"></div>
+      <div class="gc-stat-badge" role="img" aria-label="9 anos de atuação" style="background-image:url('__STAT_9ANOS_URI__')"></div>
+      <div class="gc-stat-badge" role="img" aria-label="5000 clientes" style="background-image:url('__STAT_5000_URI__')"></div>
+      <div class="gc-stat-badge" role="img" aria-label="100 por cento" style="background-image:url('__STAT_100_URI__')"></div>
+      <div class="gc-stat-badge" role="img" aria-label="350" style="background-image:url('__STAT_350_URI__')"></div>
+    </div>
+    <p class="gc-stats-caption">Clientes atendidos em mais de 5 países</p>
+  </div>
+
+  <div class="gc-wrap">
+    <div class="gc-closing">
+      <p>Obrigado pelo interesse em fazer parte do time Gioppo &amp; Conti. Nossa equipe vai analisar sua candidatura e retornar em breve.</p>
+    </div>
+
+    <footer class="gc-footer">
+      <strong>Gioppo &amp; Conti</strong><br>
+      Av. Conselheiro Nébias, 444 – 1705, Boqueirão, Santos – SP<br>
+      CNPJ: 46.848.899/0001-06
+    </footer>
+  </div>
+
+</div>
