@@ -36,7 +36,67 @@ Contexto de negócio/decisões de produto: ver [PASSAGEM-DE-PLANTAO.md](PASSAGEM
   respostas do quiz pro HubSpot ainda não tem form próprio (ver estado da feature
   abaixo).
 
-## Funil no WordPress: como está hoje (antigo) vs. proposta pós-atualização (quiz02)
+## Fluxo atual do funil em produção (atualizado em 2026-09-22)
+
+Fonte de verdade do fluxo **como está no ar hoje**. A seção seguinte ("hoje vs.
+proposta") é histórica, de antes da publicação do quiz02 e das páginas de
+resultado. Todas as páginas ficam em `https://lp.gioppoeconti.com.br`.
+
+```
+Anúncio (Meta Ads, conta act_750848079272203)
+  │
+  ├── /diagnostico-a/  (post 3261) ─┐
+  ├── /diagnostico-b/  (post 3262) ─┼─ captura: form nativo Elementor (nome, e-mail, WhatsApp com +55)
+  └── /diagnostico-c/  (post 3263) ─┘  redireciona com ?firstname=&email=&hs_whatsapp_phone_number=
+                  │
+                  ▼
+  /quizdiagnostico-02/  (post 3373) — quiz de 8 perguntas
+    · ao abrir: submitHubSpotStart() cria/atualiza o contato (captura de abandono)
+    · ao terminar: submitHubSpot() envia respostas + score (form 44ad0787-…)
+    · score: ≥60 Alta · ≥35 Média · <35 Baixa  (CONFIG.thresholds)
+                  │
+     ┌────────────┼────────────┐
+     ▼            ▼            ▼
+  /resultado-alta/   /resultado-media/   /resultado-baixa/
+  (post 3414)        (post 3416)         (post 3418)
+     │  só o botão de CTA redireciona (sem contagem regressiva)
+     └──────┬─────────────┘                 │
+            ▼                               ▼
+  /diagnostico-obrigado-a/          /diagnostico-obrigado-b/
+  Grau 1 (Alta e Média)             Grau 2 (Baixa)
+```
+
+Depois do quiz: HubSpot (portal `51117535`) → workflows "Funil diagnostico"
+(dono + Negócio no "Pipeline SDR - Nova") e "Webhook — dashboard" → Supabase
+edge function `hubspot-diagnostico-webhook` → aba "Funil Diagnóstico" do
+Portal do Cliente no `8engage-traffic-os` (ver [CR8-DASHBOARD-ARQUITETURA.md](CR8-DASHBOARD-ARQUITETURA.md)).
+
+| Etapa | URL | WordPress |
+|---|---|---|
+| Captura A | https://lp.gioppoeconti.com.br/diagnostico-a/ | post 3261, Elementor |
+| Captura B | https://lp.gioppoeconti.com.br/diagnostico-b/ | post 3262, Elementor |
+| Captura C | https://lp.gioppoeconti.com.br/diagnostico-c/ | post 3263, Elementor |
+| Quiz | https://lp.gioppoeconti.com.br/quizdiagnostico-02/ | post 3373, bloco `wp:html` |
+| Resultado Alta | https://lp.gioppoeconti.com.br/resultado-alta/ | post 3414, bloco `wp:html` |
+| Resultado Média | https://lp.gioppoeconti.com.br/resultado-media/ | post 3416, bloco `wp:html` |
+| Resultado Baixa | https://lp.gioppoeconti.com.br/resultado-baixa/ | post 3418, bloco `wp:html` |
+| Obrigado A (Grau 1) | https://lp.gioppoeconti.com.br/diagnostico-obrigado-a/ | — |
+| Obrigado B (Grau 2) | https://lp.gioppoeconti.com.br/diagnostico-obrigado-b/ | — |
+
+**Publicadas, mas fora do fluxo:** `/quizdiagnostico/` (quiz antigo),
+`/obrigado-grau-1/` e `/obrigado-grau-2/` (substituídas em 2026-09-22) e
+`/obrigado-dq/` (decidido não usar). Ambiente de teste:
+https://quiz-cidadania-italiana-rtwk.vercel.app/ (deploy automático a cada push em `main`).
+
+**Como publicar uma mudança do quiz:** as 4 páginas `wp:html` (quiz +
+3 resultados) usam **o mesmo bundle** `wordpress-embed/quiz-embed.html`.
+Toda mudança no `app.js` exige: `node wordpress-embed/build.js`, e depois
+atualizar o `post_content` das 4 páginas (3373, 3414, 3416, 3418) via
+`wp.editPost` (XML-RPC, credenciais no `.env`). Esquecer uma das 4 deixa o
+funil com versões diferentes do código. Faça backup do `post_content` atual
+(`wp.getPost`) antes de sobrescrever.
+
+## Funil no WordPress: como está hoje (antigo) vs. proposta pós-atualização (quiz02) — histórico
 
 ### Hoje (antigo, em produção — o que os anúncios usam agora)
 
